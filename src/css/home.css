@@ -1,0 +1,9 @@
+.home {
+
+}
+
+.home--recipes {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 30px;
+}
