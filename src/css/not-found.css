@@ -1,0 +1,23 @@
+.not-found {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.not-found--smile {
+  font-size: 10rem;
+}
+
+.not-found--text {
+
+}
+
+.not-found--text-header {
+  font-size: 5rem;
+}
+
+.not-found--text-description {
+  font-size: 3rem;
+}
