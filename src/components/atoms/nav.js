@@ -7,7 +7,7 @@ class Nav extends Component{
     return (
       <div className='nav'>
         <Link to="/" className='nav--link -logo'>MenuOnWeb</Link>
-        <Link to="/log-in" className='nav--link'>Log in</Link>
+        <Link to="/login" className='nav--link'>Log in</Link>
       </div>
     );
   }

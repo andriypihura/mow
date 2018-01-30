@@ -1,0 +1,25 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form--item {
+  padding: 5px;
+  margin-bottom: 15px;
+  height: 30px;
+  border: 1px solid grey;
+}
+
+.form--submit {
+  height: 35px;
+  color: #fff;
+  background-color: rgba(255, 127, 127, 1);
+  border: none;
+  transition: 0.3s opacity ease;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.form--submit:hover{
+ opacity: 0.6;
+}
