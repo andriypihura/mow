@@ -1,7 +1,24 @@
 .link {
   font-size: 1.3rem;
+  text-decoration: none;
+  background-image: linear-gradient(to top, #41403e 0%, #41403e 100%);
+  background-size: 100% 10%;
+  background-position: bottom left;
+  background-repeat: no-repeat;
+  transition: all .2s ease-in;
 }
 
 .link:hover {
-  color: #ff7f7f;
+  background-size: 20px 12%;
+  opacity: .8;
+}
+
+.link.-secondary {
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 1.5rem;
+}
+
+.link.-additional {
+  color: #fff;
+  background-image: linear-gradient(to top, #fff 0%, #fff 100%);
 }

@@ -6,15 +6,6 @@
   padding: 0 15px;
 }
 
-.nav--link {
-  font-family: 'Shadows Into Light', cursive;
-  font-size: 1.5rem;
-}
-
-.nav--link:hover {
-  color: #ff7f7f;
-}
-
 .nav--link.-logo {
   font-size: 50px;
   flex: 1 1 auto;

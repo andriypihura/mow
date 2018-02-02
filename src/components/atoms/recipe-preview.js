@@ -5,6 +5,14 @@ import './../../css/link.css';
 import DefaultImage from './../../images/no-image.png';
 
 class RecipePreview extends Component{
+  text_truncate = (str, num, max) => {
+    if(str.length < max){
+      return str
+    } else {
+      return str.slice(0,num) + ' ...'
+    }
+  }
+
   render(){
     const recipeImage = {
       backgroundImage: `url(${this.props.item.image || DefaultImage})`
@@ -25,8 +33,8 @@ class RecipePreview extends Component{
               </div>
             </div>
             <div className="recipe-preview--title">
-              <Link to={`/recipes/${this.props.item.id}`} className='link'>
-                {this.props.item.title}
+              <Link to={`/recipes/${this.props.item.id}`} className='link -additional'>
+                {this.text_truncate(this.props.item.title, 19, 22)}
               </Link>
             </div>
           </div>
