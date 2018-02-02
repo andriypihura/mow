@@ -1,0 +1,21 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login--card{
+  background-color: #fff;
+  padding: 0.8rem;
+  width: 400px;
+  padding: 30px;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  border: solid 2px #41403e;
+}
+
+.login--card h1{
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 30px;
+}
