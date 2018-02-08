@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { pageWrapper } from './page.js'
-import './../../css/recipe.css';
+import './../../css/profile.css';
 import './../../css/label.css';
 import DefaultImage from './../../images/no-image.png';
 import Loader from './../atoms/loader.js';
 
-class Recipe extends Component{
+class Profile extends Component{
 
   constructor(props) {
     super(props);
@@ -17,7 +17,11 @@ class Recipe extends Component{
   }
 
   componentDidMount() {
-    fetch(`http://localhost:5000/recipes/${this.props.match.params.id}`)
+    fetch(`http://localhost:5000/users/${this.props.match.params.id}`,
+          { headers: {
+              "Authorization": `Beablabla ${localStorage.getItem('token')}`
+            }
+          })
       .then(res => res.json())
       .then(
         (result) => {
@@ -54,28 +58,8 @@ class Recipe extends Component{
               <div className='recipe--header' style={recipeImage}>
                 <div className='recipe--header-info'>
                   <div className='recipe--header-info-title'>
-                    {item.title}
+                    {item.name}
                   </div>
-                </div>
-              </div>
-              <div className='recipe--description'>
-                <div className='recipe--labels'>
-                  <div className='label -bigger'>{item.complexity || 'easy'}</div>
-                  <div className='label -bigger'>{item.calories || '0'}kkal</div>
-                  <div className='label -bigger'>{item.time_consuming || '<10'}min</div>
-                </div>
-                <div className='recipe--description-text'>
-                  {item.text}
-                </div>
-              </div>
-            </div>
-            <div className='recipe--inner-col -smaller'>
-              <div className='recipe--sidebar'>
-                <div className='recipe--ingredients'>
-                  <div className='recipe--ingredients-header'>Ingredients</div>
-                  <ul className='recipe--ingredients-list'>
-                    {item.ingredients.split(',').map((obj, i) => <li key={i}>{obj}</li>)}
-                  </ul>
                 </div>
               </div>
             </div>
@@ -85,4 +69,4 @@ class Recipe extends Component{
     }
   }
 }
-export default pageWrapper(Recipe);
+export default pageWrapper(Profile);

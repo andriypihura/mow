@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './../../css/home.css';
 import RecipePreview from './../atoms/recipe-preview.js';
-
+import { pageWrapper } from './page.js'
+import Loader from './../atoms/loader.js';
 
 class Home extends Component{
   constructor(props) {
@@ -37,10 +38,10 @@ class Home extends Component{
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
-      return <div>Loading...</div>;
+      return <Loader />;
     } else {
       return (
-        <div className='app--body home'>
+        <div className='home'>
           <div className='home--recipes'>
             {items.map((object, i) => <RecipePreview key={i} item={object} />)}
           </div>
@@ -49,4 +50,4 @@ class Home extends Component{
     }
   }
 }
-export default Home;
+export default pageWrapper(Home);

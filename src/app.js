@@ -4,25 +4,23 @@ import './css/app.css';
 import Home from './components/pages/home.js';
 import Recipe from './components/pages/recipe.js';
 import NotFound from './components/pages/not-found.js';
-import Nav from './components/atoms/nav.js';
-import Footer from './components/atoms/footer.js';
 import Login from './components/pages/login.js';
+import Logout from './components/pages/logout.js';
+import Profile from './components/pages/profile.js';
 
 class App extends Component {
   render() {
     return (
       <Router>
         <div className='app'>
-          <div className='app--inner'>
-            <Nav />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/recipes/:id" component={Recipe} />
-              <Route component={NotFound} />
-            </Switch>
-            <Footer />
-          </div>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/logout" component={Logout} />
+            <Route exact path="/profiles/:id" component={Profile} />
+            <Route exact path="/recipes/:id" component={Recipe} />
+            <Route component={NotFound} />
+          </Switch>
         </div>
       </Router>
     );
