@@ -17,7 +17,7 @@ class Profile extends Component{
   }
 
   componentDidMount() {
-    fetch(`http://localhost:5000/users/${this.props.match.params.id}`,
+    fetch(`http://localhost:5000/checkauth`,
           { headers: {
               "Authorization": `Beablabla ${localStorage.getItem('token')}`
             }
@@ -27,10 +27,11 @@ class Profile extends Component{
         (result) => {
           this.setState({
             isLoaded: true,
-            item: result
+            item: result.user
           });
         },
         (error) => {
+          localStorage.setItem('token', '')
           this.setState({
             isLoaded: true,
             error
@@ -47,7 +48,7 @@ class Profile extends Component{
     } else if (!isLoaded) {
       return <Loader />;
     } else {
-      const recipeImage = {
+      const profileImage = {
         backgroundImage: `url(${item.image || DefaultImage})`
       };
 
@@ -55,7 +56,7 @@ class Profile extends Component{
         <div className='recipe'>
           <div className='recipe--inner'>
             <div className='recipe--inner-col -bigger'>
-              <div className='recipe--header' style={recipeImage}>
+              <div className='recipe--header' style={profileImage}>
                 <div className='recipe--header-info'>
                   <div className='recipe--header-info-title'>
                     {item.name}

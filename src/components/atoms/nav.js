@@ -5,16 +5,14 @@ import './../../css/nav.css';
 class Nav extends Component{
   constructor(props) {
     super(props);
-    this.state = {
-      userId: this.props.userId
-    }
   }
+
   render(){
-    if(this.state.userId){
+    if(localStorage.getItem('token')){
       return (
         <div className='nav'>
           <Link to="/" className='nav--link -logo'>MenuOnWeb</Link>
-          <Link to={`/profiles/${this.props.userId}`} className='link -secondary'>Profile</Link>
+          <Link to="/profile" className='link -secondary'>Profile</Link>
           <Link to="/logout" className='link -secondary'>Log out</Link>
         </div>
       );
