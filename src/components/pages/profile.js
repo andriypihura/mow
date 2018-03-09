@@ -31,7 +31,7 @@ class Profile extends Component{
           });
         },
         (error) => {
-          localStorage.setItem('token', '')
+          localStorage.removeItem('token')
           this.setState({
             isLoaded: true,
             error

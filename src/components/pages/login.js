@@ -18,7 +18,15 @@ class Login extends Component {
     event.preventDefault();
     const { email, password } = this.refs
     fetch(`http://localhost:5000/authenticate?email=${email.value}&password=${password.value}`,
-          { method: 'post' })
+          { method: 'post',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              "email": email.value,
+              "password": email.password
+            })
+          })
       .then(res => res.json())
       .then(
         (result) => {

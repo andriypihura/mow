@@ -15,7 +15,7 @@ class Logout extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    localStorage.setItem('token', '');
+    localStorage.removeItem('token');
     this.setState({submitted: true});
   }
 

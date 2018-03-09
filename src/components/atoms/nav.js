@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom';
 import './../../css/nav.css';
 
 class Nav extends Component{
-  constructor(props) {
-    super(props);
-  }
-
   render(){
     if(localStorage.getItem('token')){
       return (
