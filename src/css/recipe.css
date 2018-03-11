@@ -36,13 +36,23 @@
   justify-content: flex-end;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
 }
 
 .recipe--header-info {
   background-color: rgba(219, 219, 219, .5);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
   height: 25%;
   padding: 25px;
   width: 100%;
+}
+
+.recipe--info-date {
+  background-color: rgba(255, 255, 255, .9);
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 15px;
 }
 
 .recipe--header-info-title {
@@ -64,6 +74,34 @@
 
 }
 
+.recipe--sidebar-info-menu {
+  display: flex;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  border: solid 2px #41403e;
+  margin-left: -10px;
+  width: calc(100% + 15px);
+}
+
+.recipe--sidebar-info-menu-item {
+  flex: 1 1 50%;
+  cursor: pointer;
+  padding: 15px;
+  text-align: center;
+}
+
+.recipe--sidebar-info-menu-item:hover {
+  opacity: .9;
+}
+
+.recipe--sidebar-info-menu-item [data-icon] {
+  margin-right: 5px;
+}
+
+.recipe--sidebar-info-menu-item + .recipe--sidebar-info-menu-item {
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  border-left: solid 2px #41403e;
+}
+
 .recipe--labels {
   display: flex;
   flex-wrap: wrap;
@@ -76,15 +114,19 @@
 }
 
 .recipe--sidebar-block {
-  padding: 25px;
   background-color: rgba(219, 219, 219, .5);
   min-height: 400px;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
   border: solid 2px #41403e;
+  overflow: hidden;
 }
 
-.recipe--ingredients-header {
+.recipe--sidebar-block-inner {
+  padding: 25px;
+}
+
+.recipe--sidebar-header {
   font-size: 1.5rem;
   margin-bottom: 7px;
 }

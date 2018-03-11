@@ -25,9 +25,20 @@
   flex-basis: auto;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.comment--author {
+.comment--info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment--info-date {
+  opacity: .8;
+  font-size: .8rem;
+}
+
+.comment--info-author {
   font-size: 1.2rem;
   margin-bottom: 6px;
 }

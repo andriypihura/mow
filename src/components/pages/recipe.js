@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { pageWrapper } from './page.js'
+import { pageWrapper } from './page.js';
+import { Redirect } from 'react-router-dom';
+import Moment from 'react-moment';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import { faHeart as faHeartSolid, faPlus, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
+import { faHeart as faHeartRegular } from '@fortawesome/fontawesome-free-regular'
 import './../../css/recipe.css';
 import './../../css/label.css';
 import DefaultImage from './../../images/no-image.png';
@@ -14,14 +19,57 @@ class Recipe extends Component{
       error: null,
       isLoaded: false,
       item: {},
+      likes_count: 0,
+      liked: false,
+      user: false,
+      redirect: false,
       comments: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.likeRecipe = this.likeRecipe.bind(this);
+  }
+
+  likeRecipe(event) {
+    const { id, user } = this.state.item
+    if(!this.state.user){
+      this.setState({
+        redirect: true
+      })
+      return false
+    }
+    fetch(`http://localhost:5000/likes`,
+          { method: 'post',
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "recipe_id": id })
+          })
+      .then(res => res.json())
+      .then(
+        (response) => {
+          console.log(response);
+          const { value } = response
+          this.setState({
+            liked: value,
+            likes_count: this.state.likes_count + (value ? 1 : -1)
+          })
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
   }
 
   handleSubmit(event) {
     event.preventDefault();
     const { message, recipe_id } = this.refs
+    if(!this.state.user){
+      this.setState({
+        redirect: true
+      })
+      return false
+    }
     fetch(`http://localhost:5000/recipes/${recipe_id.value}/comments`,
           { method: 'post',
             headers: {
@@ -32,9 +80,9 @@ class Recipe extends Component{
           })
       .then(res => res.json())
       .then(
-        (responce) => {
+        (response) => {
           this.setState({
-            comments: [responce, ...this.state.comments]
+            comments: [response, ...this.state.comments]
           })
         },
         (error) => {
@@ -44,14 +92,23 @@ class Recipe extends Component{
   }
 
   componentDidMount() {
-    fetch(`http://localhost:5000/recipes/${this.props.match.params.id}`)
+    fetch(`http://localhost:5000/recipes/${this.props.match.params.id}`,
+          { method: 'get',
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            }
+          })
       .then(res => res.json())
       .then(
-        (responce) => {
+        (response) => {
           this.setState({
             isLoaded: true,
-            item: responce.recipe,
-            comments: responce.recipe.comments
+            item: response.recipe,
+            likes_count: response.recipe.likes_count,
+            liked: response.recipe.liked,
+            user: response.recipe.user,
+            comments: response.recipe.comments
           });
         },
         (error) => {
@@ -65,8 +122,10 @@ class Recipe extends Component{
 
   render(){
 
-    const { error, isLoaded, item, comments } = this.state;
-    if (error) {
+    const { error, isLoaded, item, comments, liked, likes_count, redirect } = this.state;
+    if (redirect) {
+      return <Redirect to='/login'/>;
+    } else if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
       return <Loader />;
@@ -75,14 +134,16 @@ class Recipe extends Component{
         backgroundImage: `url(${item.image || DefaultImage})`
       };
 
-      const date = new Date(Date.parse(item.created_at));
-      const formattedDate = [date.getDate(), date.getMonth() + 1, date.getFullYear()].join(':');
+      // const date = new Date(Date.parse(item.created_at));
 
       return (
         <div className='recipe'>
           <div className='recipe--inner'>
             <div className='recipe--inner-col -bigger'>
               <div className='recipe--header' style={recipeImage}>
+                <Moment format="DD.MM.YYYY" className='recipe--info-date'>
+                  {item.created_at}
+                </Moment>
                 <div className='recipe--header-info'>
                   <div className='recipe--header-info-title'>
                     {item.title}
@@ -101,17 +162,29 @@ class Recipe extends Component{
             <div className='recipe--inner-col -smaller'>
               <div className='recipe--sidebar'>
                 <div className='recipe--sidebar-block'>
-                  <div className='recipe--time'>{formattedDate}</div>
-                  <div className='recipe--labels'>
-                    <div className='label -bigger'>{item.complexity || 'easy'}</div>
-                    <div className='label -bigger'>{item.calories || '0'}kkal</div>
-                    <div className='label -bigger'>{item.time_consuming || '<10'}min</div>
+                  <div className='recipe--sidebar-info-menu'>
+                    <div className='recipe--sidebar-info-menu-item' data-liked={liked} onClick={this.likeRecipe}>
+                      <FontAwesomeIcon icon={liked ? faHeartSolid : faHeartRegular} />
+                      <span>{likes_count || 0}</span>
+                    </div>
+                    <div className='recipe--sidebar-info-menu-item'>
+                      <FontAwesomeIcon icon={faPlus} />
+                      <span>Add to menu</span>
+                    </div>
                   </div>
+                  <div className='recipe--sidebar-block-inner'>
+                    <div className='recipe--sidebar-header'>Labels</div>
+                    <div className='recipe--labels'>
+                      <div className='label -bigger'>{item.complexity || 'easy'}</div>
+                      <div className='label -bigger'>{item.calories || '0'}kkal</div>
+                      <div className='label -bigger'>{item.time_consuming || '<10'}min</div>
+                    </div>
 
-                  <div className='recipe--ingredients-header'>Ingredients</div>
-                  <ul className='recipe--ingredients-list'>
-                    {item.ingredients.split(',').map((obj, i) => <li key={i}>{obj}</li>)}
-                  </ul>
+                    <div className='recipe--sidebar-header'>Ingredients</div>
+                    <ul className='recipe--ingredients-list'>
+                      {item.ingredients.split(',').map((obj, i) => <li key={i}>{obj}</li>)}
+                    </ul>
+                  </div>
                 </div>
 
                 <div className='recipe--comment-form'>
