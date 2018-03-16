@@ -17,3 +17,7 @@
   width: 100%;
   display: flex;
 }
+
+.app--inner.-secondary {
+  width: 100%;
+}

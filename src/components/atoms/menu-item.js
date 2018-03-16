@@ -4,7 +4,7 @@ import './../../css/recipe-preview.css';
 import './../../css/link.css';
 import DefaultImage from './../../images/no-image.png';
 
-class RecipePreview extends Component{
+class MenuItem extends Component{
   text_truncate = (str, num, max) => {
     if(str.length < max){
       return str
@@ -14,17 +14,12 @@ class RecipePreview extends Component{
   }
 
   render(){
-    const { id, title, complexity, calories, image, time_consuming } = this.props.item
-    const recipeImage = {
-      backgroundImage: `url(${image || DefaultImage})`
-    };
-
+    const { id, created_at  } = this.props.menu_item
+    const { title, complexity, calories, image, time_consuming } = this.props.menu_item.recipe
 
     return (
-      <div className="recipe-preview">
-        <div className="recipe-preview--inner" style={recipeImage}>
-          <div className="recipe-preview--image">
-          </div>
+      <div className="recipe-preview -menu-item">
+        <div className="recipe-preview--inner">
           <div className="recipe-preview--text">
             <div className="recipe-preview--labels">
               <div className="label">
@@ -38,9 +33,7 @@ class RecipePreview extends Component{
               </div>
             </div>
             <div className="recipe-preview--title">
-              <Link to={`/recipes/${id}`} className='link -additional'>
-                {this.text_truncate(title, 19, 22)}
-              </Link>
+              {this.text_truncate(title, 15, 18)}
             </div>
           </div>
         </div>
@@ -48,4 +41,4 @@ class RecipePreview extends Component{
     );
   }
 }
-export default RecipePreview;
+export default MenuItem;

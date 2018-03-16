@@ -10,6 +10,7 @@ import './../../css/label.css';
 import DefaultImage from './../../images/no-image.png';
 import Loader from './../atoms/loader.js';
 import Comment from './../atoms/comment.js';
+import HandleErrors from './../helpers/error-handler.js';
 
 class Recipe extends Component{
 
@@ -21,22 +22,15 @@ class Recipe extends Component{
       item: {},
       likes_count: 0,
       liked: false,
-      user: false,
-      redirect: false,
       comments: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.likeRecipe = this.likeRecipe.bind(this);
   }
 
   likeRecipe(event) {
-    const { id, user } = this.state.item
-    if(!this.state.user){
-      this.setState({
-        redirect: true
-      })
-      return false
-    }
+    const { id } = this.state.item
     fetch(`http://localhost:5000/likes`,
           { method: 'post',
             headers: {
@@ -45,31 +39,26 @@ class Recipe extends Component{
             },
             body: JSON.stringify({ "recipe_id": id })
           })
+      .then(HandleErrors)
       .then(res => res.json())
-      .then(
-        (response) => {
-          console.log(response);
-          const { value } = response
-          this.setState({
-            liked: value,
-            likes_count: this.state.likes_count + (value ? 1 : -1)
-          })
-        },
-        (error) => {
-          console.log(error);
-        }
-      )
+      .then((response) => {
+        const { value } = response
+        this.setState({
+          liked: value,
+          likes_count: this.state.likes_count + (value ? 1 : -1)
+        })
+      })
+      .catch(error => this.setState({ error: error }))
+  }
+
+  handleKeyDown(event) {
+    if(event.keyCode == 13 && event.ctrlKey)
+      this.handleSubmit(event)
   }
 
   handleSubmit(event) {
     event.preventDefault();
     const { message, recipe_id } = this.refs
-    if(!this.state.user){
-      this.setState({
-        redirect: true
-      })
-      return false
-    }
     fetch(`http://localhost:5000/recipes/${recipe_id.value}/comments`,
           { method: 'post',
             headers: {
@@ -78,17 +67,15 @@ class Recipe extends Component{
             },
             body: JSON.stringify({ "message": message.value })
           })
+      .then(HandleErrors)
       .then(res => res.json())
-      .then(
-        (response) => {
-          this.setState({
-            comments: [response, ...this.state.comments]
-          })
-        },
-        (error) => {
-          console.log(error);
-        }
-      )
+      .then((response) => {
+        message.value = ''
+        this.setState({
+          comments: [response, ...this.state.comments]
+        })
+      })
+      .catch(error => this.setState({ error: error }))
   }
 
   componentDidMount() {
@@ -99,34 +86,24 @@ class Recipe extends Component{
               'Content-Type': 'application/json'
             }
           })
+      .then(HandleErrors)
       .then(res => res.json())
-      .then(
-        (response) => {
-          this.setState({
-            isLoaded: true,
-            item: response.recipe,
-            likes_count: response.recipe.likes_count,
-            liked: response.recipe.liked,
-            user: response.recipe.user,
-            comments: response.recipe.comments
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
+      .then((response) => {
+        this.setState({
+          isLoaded: true,
+          item: response.recipe,
+          likes_count: response.recipe.likes_count,
+          liked: response.recipe.liked,
+          comments: response.recipe.comments
+        });
+      })
+      .catch(error => this.setState({ isLoaded: true, error: error }))
   }
 
   render(){
-
-    const { error, isLoaded, item, comments, liked, likes_count, redirect } = this.state;
-    if (redirect) {
-      return <Redirect to='/login'/>;
-    } else if (error) {
-      return <div>Error: {error.message}</div>;
+    const { error, isLoaded, item, comments, liked, likes_count } = this.state;
+    if (error) {
+      return <Redirect to={`/error/${error.code}/${error.message}`} />;
     } else if (!isLoaded) {
       return <Loader />;
     } else {
@@ -201,6 +178,7 @@ class Recipe extends Component{
                           placeholder="Leave your comment here..."
                           name="message"
                           ref='message'
+                          onKeyDown={this.handleKeyDown}
                           type="text"
                       />
                       <input

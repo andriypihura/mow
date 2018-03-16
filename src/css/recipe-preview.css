@@ -5,6 +5,12 @@
   height: 250px;
 }
 
+.recipe-preview.-menu-item {
+  width: 100%;
+  min-width: 0;
+  height: auto;
+}
+
 .recipe-preview--inner {
   background-size: cover;
   background-position: center;
@@ -58,4 +64,5 @@
 .recipe-preview--title {
   font-size: 1.2rem;
   text-transform: uppercase;
+  color: #fff;
 }

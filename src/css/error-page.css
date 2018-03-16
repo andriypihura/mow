@@ -1,4 +1,4 @@
-.not-found {
+.error-page {
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -7,18 +7,18 @@
   width: 100%;
 }
 
-.not-found--smile {
+.error-page--smile {
   font-size: 10rem;
 }
 
-.not-found--text {
+.error-page--text {
 
 }
 
-.not-found--text-header {
+.error-page--text-header {
   font-size: 5rem;
 }
 
-.not-found--text-description {
+.error-page--text-description {
   font-size: 3rem;
 }

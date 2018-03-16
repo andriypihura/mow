@@ -3,6 +3,7 @@ import './../../css/home.css';
 import RecipePreview from './../atoms/recipe-preview.js';
 import { pageWrapper } from './page.js'
 import Loader from './../atoms/loader.js';
+import HandleErrors from './../helpers/error-handler.js';
 
 class Home extends Component{
   constructor(props) {
@@ -16,21 +17,15 @@ class Home extends Component{
 
   componentDidMount() {
     fetch("http://localhost:5000/recipes?page=1")
+      .then(HandleErrors)
       .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            items: result
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
+      .then((result) => {
+        this.setState({
+          isLoaded: true,
+          items: result.recipes
+        });
+      })
+      .catch(error => this.setState({ isLoaded: true, error: error }))
   }
 
   render(){

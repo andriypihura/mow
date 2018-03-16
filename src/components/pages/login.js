@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { pageWrapper } from './page.js'
 import './../../css/login.css';
 import './../../css/form.css';
+import HandleErrors from './../helpers/error-handler.js';
 
 class Login extends Component {
   constructor(props) {
@@ -17,28 +18,23 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const { email, password } = this.refs
-    fetch(`http://localhost:5000/authenticate?email=${email.value}&password=${password.value}`,
+    fetch(`http://localhost:5000/authenticate`,
           { method: 'post',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
               "email": email.value,
-              "password": email.password
+              "password": password.value
             })
           })
+      .then(HandleErrors)
       .then(res => res.json())
-      .then(
-        (result) => {
-          localStorage.setItem('token', result.auth_token);
-          this.setState({submitted: true});
-        },
-        (error) => {
-          console.log('login errors:');
-          console.log(error);
-          this.setState({errors: true});
-        }
-      )
+      .then((result) => {
+        localStorage.setItem('token', result.auth_token);
+        this.setState({submitted: true});
+      })
+      .catch(error => this.setState({ errors: true }))
   }
 
   render() {

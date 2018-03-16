@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { pageWrapper } from './page.js'
+import { Redirect } from 'react-router-dom';
 import './../../css/profile.css';
 import './../../css/label.css';
 import DefaultImage from './../../images/no-image.png';
 import Loader from './../atoms/loader.js';
+import HandleErrors from './../helpers/error-handler.js';
 
 class Profile extends Component{
 
@@ -22,29 +24,23 @@ class Profile extends Component{
               "Authorization": `Beablabla ${localStorage.getItem('token')}`
             }
           })
+      .then(HandleErrors)
       .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            item: result.user
-          });
-        },
-        (error) => {
-          localStorage.removeItem('token')
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
+      .then((result) => {
+        console.log(result);
+        this.setState({
+          isLoaded: true,
+          item: result.user
+        });
+      })
+      .catch(error => this.setState({ isLoaded: true, error: error }))
   }
 
   render(){
 
     const { error, isLoaded, item } = this.state;
     if (error) {
-      return <div>Error: {error.message}</div>;
+      return <Redirect to={`/error/${error.code}/${error.message}`} />;
     } else if (!isLoaded) {
       return <Loader />;
     } else {
