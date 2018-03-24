@@ -1,0 +1,36 @@
+.menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-top: 40px;
+}
+
+.menu--title {
+  font-size: 1.5rem;
+  padding-left: 15px;
+}
+
+.menu--sections {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+}
+
+.menu--sections-inner {
+  display: inline-flex;
+  padding: 20px 0;
+  flex: 1 1 auto;
+}
+
+.menu--section {
+  background-color: rgba(255, 255, 255, .5);
+  width: 250px;
+  margin: 0 15px;
+}
+
+.menu--section-title {
+  text-align: center;
+  padding-top: 5px;
+  text-transform: uppercase;
+}

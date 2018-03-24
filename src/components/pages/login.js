@@ -1,67 +1,77 @@
 import React, { Component } from 'react';
-import AuthService from './../services/auth-service.js';
+import { Redirect } from 'react-router-dom';
+import { pageWrapper } from './page.js'
 import './../../css/login.css';
 import './../../css/form.css';
+import HandleErrors from './../helpers/error-handler.js';
 
 class Login extends Component {
-  constructor(){
-    super();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.Auth = new AuthService();
+  constructor(props) {
+    super(props);
+    this.state = {
+      submitted: false,
+      errors: false
+    }
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillMount() {
-    if(this.Auth.loggedIn())
-      this.props.history.replace('/');
+  handleSubmit(event) {
+    event.preventDefault();
+    const { email, password } = this.refs
+    fetch(`http://localhost:5000/authenticate`,
+          { method: 'post',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              "email": email.value,
+              "password": password.value
+            })
+          })
+      .then(HandleErrors)
+      .then(res => res.json())
+      .then((result) => {
+        localStorage.setItem('token', result.auth_token);
+        this.setState({submitted: true});
+      })
+      .catch(error => this.setState({ errors: true }))
   }
 
   render() {
-    return (
-      <div className="app--body login">
-        <div className="login--card">
-          <h1>Login</h1>
-          <form className="form">
-              <input
-                  className="form--item"
-                  placeholder="Username goes here..."
-                  name="username"
-                  type="text"
-                  onChange={this.handleChange}
-              />
-              <input
-                  className="form--item"
-                  placeholder="Password goes here..."
-                  name="password"
-                  type="password"
-                  onChange={this.handleChange}
-              />
-              <input
-                  className="form--submit"
-                  value="SUBMIT"
-                  type="submit"
-              />
-          </form>
+    const { submitted, errors } = this.state
+    if(!localStorage.getItem('token'))
+      return (
+        <div className="login">
+          <div className="login--card">
+            <h1>Login</h1>
+            {errors && <p>No-no-no, try again</p>}
+            <form className="form" onSubmit={this.handleSubmit}>
+                <input
+                    className="form--item"
+                    placeholder="Username goes here..."
+                    name="email"
+                    ref='email'
+                    type="email"
+                />
+                <input
+                    className="form--item"
+                    placeholder="Password goes here..."
+                    name="password"
+                    ref='password'
+                    type="password"
+                />
+                <input
+                    className="form--submit"
+                    value="SUBMIT"
+                    type="submit"
+                />
+            </form>
+            {submitted && (<Redirect to='/'/>)}
+          </div>
         </div>
-      </div>
-    );
-  }
-
-  handleFormSubmit(e){
-    e.preventDefault();
-
-    this.Auth.login(this.state.username,this.state.password)
-        .then(res => {
-           this.props.history.replace('/');
-        })
-        .catch(err => {
-            alert(err);
-        })
-  }
-
-  handleChange(e){
-    this.setState({ [e.target.name]: e.target.value })
+      );
+    return <Redirect to="/" />;
   }
 }
 
-export default Login;
+export default pageWrapper(Login);
