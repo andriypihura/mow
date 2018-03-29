@@ -9,6 +9,7 @@ import Logout from './components/pages/logout.js';
 import Profile from './components/pages/profile.js';
 import Menus from './components/pages/menus.js';
 import Menu from './components/pages/menu.js';
+import Search from './components/pages/search.js';
 
 class App extends Component {
   render() {
@@ -23,6 +24,7 @@ class App extends Component {
             <Route exact path="/menus" component={Menus} />
             <Route exact path="/recipes/:id" component={Recipe} />
             <Route exact path="/menu/:id" component={Menu} />
+            <Route exact path="/search" component={Search} />
             <Route exact path="/error/:code/:message" component={ErrorPage} />
             <Route component={ErrorPage} />
           </Switch>
