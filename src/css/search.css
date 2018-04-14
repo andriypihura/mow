@@ -15,11 +15,17 @@
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
 }
 
+.search--filters-title {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
 .search--recipes {
   flex: 1 1 auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+  align-content: flex-start;
 }
 
 .search--recipes .recipe-preview {

@@ -16,7 +16,7 @@ class Search extends Component{
       isLoaded: false,
       items: [],
       page: 1,
-      filterData: {},
+      filterData: { },
       newRecipesReady: false,
       pageCount: 2
     };
@@ -25,36 +25,30 @@ class Search extends Component{
     this.handleScroll = this.handleScroll.bind(this);
   }
 
-  filterResults(data) {
+  filterResults(data = {}) {
+    console.log('<<<<<>>>>>');
     this.setState({ newRecipesReady: false })
-    if(this.state.pageCount <= this.state.page)
+    this.setState({
+      filterData: data
+    })
+    console.log(this.state);
+    if(this.state.pageCount < data['page'])
       return false;
-    if(data){
-      if(typeof(data)==='number'){
-        let dataWithNewPage = this.state.filterData
-        dataWithNewPage['page'] = data
-        this.setState({
-          page: data,
-          filterData: dataWithNewPage
-        })
-      } else {
-        this.setState({ filterData: this.buildDataToSend(data) })
-      }
-    }
+    console.log(data);
 
     fetch("http://localhost:5000/recipes/filter",
           { method: 'post',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.state.filterData)
+            body: JSON.stringify(data)
           })
       .then(HandleErrors)
       .then(res => res.json())
       .then((result) => {
         this.setState({
           isLoaded: true,
-          items: this.state.items.concat(result.recipes),
+          items: data['page'] !== 1 && this.state.items.concat(result.recipes) || result.recipes,
           newRecipesReady: true,
           pageCount: result.pageCount
         });
@@ -74,14 +68,15 @@ class Search extends Component{
         'complexity'
       ]
     for(let key of valuesArray){
-      if(data[key] && data[key].value)
+      if(data[key] && data[key].value){
         newData[key] = data[key].value
+      }
     }
     return newData;
   }
 
   componentDidMount() {
-    this.filterResults()
+    this.filterResults({ page: 1 })
     window.addEventListener('scroll', this.handleScroll);
   }
 
@@ -93,14 +88,15 @@ class Search extends Component{
     let scrollTop = document.documentElement.scrollTop
     let targetOffsetTop = document.getElementById('js-mark-bottom').offsetTop
     if(targetOffsetTop - scrollTop - window.innerHeight < 500 && this.state.newRecipesReady){
-      this.setState({ page: this.state.page + 1})
-      this.filterResults(this.state.page);
+      let dataToSend = this.state.filterData
+      dataToSend['page'] = this.state.filterData['page'] + 1
+      this.filterResults(dataToSend);
     }
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.filterResults(event.target.elements)
+    this.filterResults(this.buildDataToSend(event.target.elements));
   }
 
   render(){
@@ -113,6 +109,9 @@ class Search extends Component{
       return (
         <div className='search'>
           <div className='search--filters'>
+            <div className='search--filters-title'>
+              Filters
+            </div>
             <form className="form" onSubmit={this.handleSubmit}>
                 <input
                     className="form--item"
@@ -128,14 +127,16 @@ class Search extends Component{
                       className="form--item"
                       placeholder="from.."
                       name="time_consuming_from"
-                      type="text"
+                      min="0"
+                      type="number"
                   />
                   <span><FontAwesomeIcon icon={faAngleLeft} /></span>
                   <input
                       className="form--item"
                       placeholder="to.."
                       name="time_consuming_to"
-                      type="text"
+                      min="0"
+                      type="number"
                   />
                 </div>
                 <label className="form--label" htmlFor='time_consuming_from'>
@@ -146,14 +147,16 @@ class Search extends Component{
                       className="form--item"
                       placeholder="from.."
                       name="calories_from"
-                      type="text"
+                      min="0"
+                      type="number"
                   />
                   <span><FontAwesomeIcon icon={faAngleLeft} /></span>
                   <input
                       className="form--item"
                       placeholder="to.."
                       name="calories_to"
-                      type="text"
+                      min="0"
+                      type="number"
                   />
                 </div>
                 <label className="form--label" htmlFor='time_consuming_from'>
@@ -191,7 +194,7 @@ class Search extends Component{
                 </div>
                 <input
                     className="form--submit"
-                    value="Filter"
+                    value="Submit"
                     type="submit"
                 />
             </form>
