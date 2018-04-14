@@ -18,7 +18,7 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const { email, password } = this.refs
-    fetch(`http://localhost:5000/authenticate`,
+    fetch(`${process.env.REACT_APP_APIURL}/authenticate`,
           { method: 'post',
             headers: {
               'Content-Type': 'application/json'

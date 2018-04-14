@@ -19,7 +19,7 @@ class Profile extends Component{
   }
 
   componentDidMount() {
-    fetch(`http://localhost:5000/checkauth`,
+    fetch(`${process.env.REACT_APP_APIURL}/checkauth`,
           { headers: {
               "Authorization": `Beablabla ${localStorage.getItem('token')}`
             }

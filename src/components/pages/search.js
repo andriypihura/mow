@@ -36,7 +36,7 @@ class Search extends Component{
       return false;
     console.log(data);
 
-    fetch("http://localhost:5000/recipes/filter",
+    fetch(`${process.env.REACT_APP_APIURL}/recipes/filter`,
           { method: 'post',
             headers: {
               'Content-Type': 'application/json'

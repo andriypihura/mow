@@ -31,7 +31,7 @@ class Recipe extends Component{
 
   likeRecipe(event) {
     const { id } = this.state.item
-    fetch(`http://localhost:5000/likes`,
+    fetch(`${process.env.REACT_APP_APIURL}/likes`,
           { method: 'post',
             headers: {
               "Authorization": `Bearer ${localStorage.getItem('token')}`,
@@ -59,7 +59,7 @@ class Recipe extends Component{
   handleSubmit(event) {
     event.preventDefault();
     const { message, recipe_id } = this.refs
-    fetch(`http://localhost:5000/recipes/${recipe_id.value}/comments`,
+    fetch(`${process.env.REACT_APP_APIURL}/recipes/${recipe_id.value}/comments`,
           { method: 'post',
             headers: {
               "Authorization": `Bearer ${localStorage.getItem('token')}`,
@@ -79,7 +79,7 @@ class Recipe extends Component{
   }
 
   componentDidMount() {
-    fetch(`http://localhost:5000/recipes/${this.props.match.params.id}`,
+    fetch(`${process.env.REACT_APP_APIURL}/recipes/${this.props.match.params.id}`,
           { method: 'get',
             headers: {
               "Authorization": `Bearer ${localStorage.getItem('token')}`,

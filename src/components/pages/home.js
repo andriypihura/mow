@@ -16,7 +16,7 @@ class Home extends Component{
   }
 
   componentDidMount() {
-    fetch("http://localhost:5000/recipes?page=1")
+    fetch(`${process.env.REACT_APP_APIURL}/recipes?page=1`)
       .then(HandleErrors)
       .then(res => res.json())
       .then((result) => {

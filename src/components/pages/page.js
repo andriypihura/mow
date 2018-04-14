@@ -6,7 +6,7 @@ import HandleErrors from './../helpers/error-handler.js';
 export const pageWrapper = (WrappedComponent, secondary) => {
   class Wrapper extends Component {
     checkauth() {
-      fetch(`http://localhost:5000/checkauth`,
+      fetch(`${process.env.REACT_APP_APIURL}/checkauth`,
             { method: 'get',
               headers: {
                 "Authorization": `Beablabla ${localStorage.getItem('token')}`

@@ -19,7 +19,7 @@ class Menus extends Component{
   }
 
   componentDidMount() {
-    fetch(`http://localhost:5000/users/${sessionStorage.getItem('user')}/menus`,
+    fetch(`${process.env.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus`,
           { method: 'get',
             headers: {
               "Authorization": `Bearer ${localStorage.getItem('token')}`,
