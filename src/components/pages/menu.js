@@ -3,7 +3,7 @@ import { pageWrapper } from './page.js';
 import { Redirect } from 'react-router-dom';
 import './../../css/menu.css';
 import Loader from './../atoms/loader.js';
-import MenuItem from './../atoms/menu-item.js';
+import MenuSection from './../atoms/menu-section.js';
 import HandleErrors from './../helpers/error-handler.js';
 
 class Menu extends Component{
@@ -29,7 +29,6 @@ class Menu extends Component{
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
-        console.log(response);
         this.setState({
           isLoaded: true,
           menu: response.menu,
@@ -57,10 +56,7 @@ class Menu extends Component{
           <div className='menu--sections'>
             <div className='menu--sections-inner'>
               {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((d, i) =>
-                <div className='menu--section' key={i}>
-                  <div className='menu--section-title'>{d}</div>
-                  {menu_items.map((item, j) => item.primary_label == d && <MenuItem key={j} menu_item={item} />)}
-                </div>
+                <MenuSection key={i} day={d} menu_items={menu_items.filter((item) => item.primary_label == d)} />
               )}
             </div>
           </div>
