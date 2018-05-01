@@ -54,8 +54,6 @@ class MenuItemModal extends Component{
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
-        console.log('response:');
-        console.log(response);
         this.setState({
           isLoaded: true
         })
