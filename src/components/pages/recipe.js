@@ -25,7 +25,8 @@ class Recipe extends Component{
       liked: false,
       openMenusDropdown: false,
       menus: [],
-      comments: []
+      comments: [],
+      deleted: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -128,6 +129,24 @@ class Recipe extends Component{
       .catch(error => this.setState({ error: error }))
   }
 
+  onDelete(event) {
+    fetch(`${process.env.REACT_APP_APIURL}/recipes/${this.props.match.params.id}`,
+          { method: 'delete',
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            }
+          })
+      .then(HandleErrors)
+      .then(res => res.json())
+      .then((response) => {
+        this.setState({
+          deleted: true
+        })
+      })
+      .catch(error => this.setState({ error: error }))
+  }
+
   componentDidMount() {
     fetch(`${process.env.REACT_APP_APIURL}/recipes/${this.props.match.params.id}`,
           { method: 'get',
@@ -151,9 +170,11 @@ class Recipe extends Component{
   }
 
   render(){
-    const { error, isLoaded, item, comments, liked, likes_count, openMenusDropdown, menus } = this.state;
+    const { deleted, error, isLoaded, item, comments, liked, likes_count, openMenusDropdown, menus } = this.state;
     if (error) {
       return <Redirect to={`/error/${error.code}/${error.message}`} />;
+    } else if (deleted) {
+      return <Redirect to='/' />;
     } else if (!isLoaded) {
       return <Loader />;
     } else {
@@ -167,7 +188,16 @@ class Recipe extends Component{
             <div className='recipe--inner-col -bigger'>
               <div className='recipe--header' style={recipeImage}>
                 <div className='recipe--header-top-menu'>
-                  <Link to={`/recipes/${item.id}/edit`} className='link'>Edit recipe</Link>
+                  {(sessionStorage.getItem('admin') || item.user.id == sessionStorage.getItem('user')) &&
+                    <div
+                      className='link'
+                      onClick={(event) => { if(window.confirm('Are you sure you wish to delete this item?')) this.onDelete(event)}}>
+                      Delete recipe
+                    </div>
+                  }
+                  {(sessionStorage.getItem('admin') || item.user.id == sessionStorage.getItem('user')) &&
+                    <Link to={`/recipes/${item.id}/edit`} className='link'>Edit recipe</Link>
+                  }
                   <Moment format="DD.MM.YYYY" className='recipe--info-date'>
                     {item.created_at}
                   </Moment>

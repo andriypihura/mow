@@ -44,12 +44,14 @@
   position: absolute;
   right: 0;
   top: 0;
+  display: flex;
   padding: 15px;
 }
 
 .recipe--header-top-menu .link {
   margin-right: 10px;
   font-size: 1rem;
+  cursor: pointer;
 }
 
 .recipe--header-info {

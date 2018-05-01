@@ -21,6 +21,7 @@ class RecipeEdit extends Component{
   }
 
   componentDidMount() {
+    console.log(sessionStorage);
     if (!this.props.match.params.id){
       this.setState({isLoaded: true, createMod: true})
       return
@@ -45,8 +46,6 @@ class RecipeEdit extends Component{
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(new FormData(event.target));
-    let data = this.buildDataToSend(event.target.elements);
     let fetchUrl = `${process.env.REACT_APP_APIURL}/recipes/${this.state.item.id}`
     let fetchMethod = this.state.createMod ? 'post' :'put'
     if (this.state.createMod)
@@ -69,28 +68,6 @@ class RecipeEdit extends Component{
         })
       })
       .catch(error => this.setState({ error: error }))
-  }
-
-  buildDataToSend(data) {
-    let newData = { page: 1 }
-    const valuesArray =
-      [
-        'user_id',
-        'title',
-        'time_consuming',
-        'calories',
-        'complexity',
-        'text',
-        'ingredients',
-        'image'
-      ]
-    console.log(data['image']);
-    for(let key of valuesArray){
-      if(data[key] && data[key].value){
-        newData[key] = data[key].value
-      }
-    }
-    return newData;
   }
 
   render(){
@@ -178,7 +155,7 @@ class RecipeEdit extends Component{
                     name="complexity"
                     value='hard'
                     type="radio"
-                    selected={item.complexity == 'hard'}
+                    defaultChecked={item.complexity == 'hard'}
                 />
                 <label htmlFor="complexityHard">Hard</label>
                 <input
@@ -186,7 +163,7 @@ class RecipeEdit extends Component{
                     name="complexity"
                     value='normal'
                     type="radio"
-                    selected={item.complexity == 'normal'}
+                    defaultChecked={item.complexity == 'normal'}
                 />
                 <label htmlFor="complexityNormal">Normal</label>
                 <input
@@ -194,7 +171,7 @@ class RecipeEdit extends Component{
                     name="complexity"
                     value='easy'
                     type="radio"
-                    selected={item.complexity == 'easy'}
+                    defaultChecked={item.complexity == 'easy'}
                 />
                 <label htmlFor="complexityEasy">Easy</label>
               </div>
@@ -228,6 +205,30 @@ class RecipeEdit extends Component{
                 />
               </div>
             </div>
+            {sessionStorage.getItem('admin') &&
+              <div className="form--row">
+                <label className="form--label" htmlFor='calories'>
+                  Visibility
+                </label>
+                <div className="form--field -radio-set">
+                  <input
+                      id="visibilityForSelf"
+                      name="visibility"
+                      value='for_self'
+                      type="radio"
+                      defaultChecked={item.visibility == 'for_self'}
+                  />
+                  <label htmlFor="complexityHard">For self</label>
+                  <input
+                      id="visibilityPublic"
+                      name="visibility"
+                      value='public'
+                      type="radio"
+                      defaultChecked={item.visibility == 'public'}
+                  />
+                  <label htmlFor="complexityNormal">Public</label>
+                </div>
+              </div>}
             <input
                 className="form--submit"
                 value="Submit"

@@ -16,10 +16,16 @@ export const pageWrapper = (WrappedComponent, secondary) => {
         .then(res => res.json())
         .then((result) => {
           sessionStorage.setItem('user', result.user.id)
+          if(result.user.roles && result.user.roles.includes('admin')){
+            sessionStorage.setItem('admin', true)
+          } else {
+            sessionStorage.removeItem('admin')
+          }
         })
         .catch((error) => {
           localStorage.removeItem('token')
           sessionStorage.removeItem('user')
+          sessionStorage.removeItem('admin')
         })
     }
 
