@@ -67,8 +67,6 @@ class RecipeOverview extends Component{
   }
 
   changeType (newType) {
-    console.log('before change');
-    console.log(this.state.type);
     this.setState(
       {
         type: this.state.type === 'my' ? 'likes' : 'my',

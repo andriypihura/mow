@@ -21,7 +21,6 @@ class RecipeEdit extends Component{
   }
 
   componentDidMount() {
-    console.log(sessionStorage);
     if (!this.props.match.params.id){
       this.setState({isLoaded: true, createMod: true})
       return
@@ -50,8 +49,6 @@ class RecipeEdit extends Component{
     let fetchMethod = this.state.createMod ? 'post' :'put'
     if (this.state.createMod)
       fetchUrl = `${process.env.REACT_APP_APIURL}/recipes`
-    console.log(fetchUrl);
-    console.log(fetchMethod);
     fetch(fetchUrl,
           { method: fetchMethod,
             headers: {
