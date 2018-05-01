@@ -26,15 +26,12 @@ class Search extends Component{
   }
 
   filterResults(data = {}) {
-    console.log('<<<<<>>>>>');
     this.setState({ newRecipesReady: false })
     this.setState({
       filterData: data
     })
-    console.log(this.state);
     if(this.state.pageCount < data['page'])
       return false;
-    console.log(data);
 
     fetch(`${process.env.REACT_APP_APIURL}/recipes/filter`,
           { method: 'post',

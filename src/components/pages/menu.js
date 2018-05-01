@@ -54,11 +54,9 @@ class Menu extends Component{
             </div>
           </div>
           <div className='menu--sections'>
-            <div className='menu--sections-inner'>
-              {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((d, i) =>
-                <MenuSection key={i} day={d} menu_items={menu_items.filter((item) => item.primary_label == d)} />
-              )}
-            </div>
+            {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((d, i) =>
+              <MenuSection key={i} day={d} menu_id={menu.id} menu_items={menu_items.filter((item) => item.primary_label == d)} />
+            )}
           </div>
         </div>
       );

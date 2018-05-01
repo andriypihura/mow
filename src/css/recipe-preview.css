@@ -6,9 +6,18 @@
 }
 
 .recipe-preview.-menu-item {
-  width: 100%;
-  min-width: 0;
+  width: 250px;
+  max-width: 250px;
   height: auto;
+  min-height: 60px;
+  margin-right: 15px;
+  margin-bottom: 10px;
+}
+
+.recipe-preview.-menu-item .recipe-preview--inner {
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .recipe-preview--inner {
@@ -25,10 +34,30 @@
   overflow: hidden;
 }
 
-.recipe-preview--image {
+.recipe-preview--ingredients {
   border-bottom: 0;
-  flex: 1 1 75%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  flex: 1 1 60%;
   width: 100%;
+  margin: 0;
+  padding: 10px 15px 10px 25px;
+}
+
+.recipe-preview--ingredients.-bg,
+.recipe-preview--ingredients-title {
+  background-color: rgba(255,255,255,.5);
+}
+
+.recipe-preview--ingredients-title {
+  font-size: 1.1rem;
+  padding: 10px 0 0 10px;
+  width: 100%;
+}
+
+.recipe-preview--ingredients li {
+  width: 50%;
 }
 
 .recipe-preview--text {

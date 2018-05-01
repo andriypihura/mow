@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { pageWrapper } from './page.js';
+import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import Moment from 'react-moment';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
@@ -22,11 +23,15 @@ class Recipe extends Component{
       item: {},
       likes_count: 0,
       liked: false,
+      openMenusDropdown: false,
+      menus: [],
       comments: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.likeRecipe = this.likeRecipe.bind(this);
+    this.toogleMenusDropdown = this.toogleMenusDropdown.bind(this);
+    this.addToMenu = this.addToMenu.bind(this);
   }
 
   likeRecipe(event) {
@@ -46,6 +51,51 @@ class Recipe extends Component{
         this.setState({
           liked: value,
           likes_count: this.state.likes_count + (value ? 1 : -1)
+        })
+      })
+      .catch(error => this.setState({ error: error }))
+  }
+
+  toogleMenusDropdown(event) {
+    if(this.state.openMenusDropdown){
+      this.setState({
+        openMenusDropdown: false
+      })
+      return
+    }
+    fetch(`${process.env.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus`,
+          { method: 'get',
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            }
+          })
+      .then(HandleErrors)
+      .then(res => res.json())
+      .then((response) => {
+        this.setState({
+          openMenusDropdown: true,
+          menus: response.menus
+        })
+      })
+      .catch(error => this.setState({ error: error }))
+  }
+
+  addToMenu(event) {
+    let menu_id = event.target.dataset.id
+    fetch(`${process.env.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus/${menu_id}/menu_items`,
+          { method: 'post',
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"recipe_id": this.state.item.id, secondary_label: 1, primary_label: 'Sunday' })
+          })
+      .then(HandleErrors)
+      .then(res => res.json())
+      .then((response) => {
+        this.setState({
+          openMenusDropdown: false
         })
       })
       .catch(error => this.setState({ error: error }))
@@ -101,7 +151,7 @@ class Recipe extends Component{
   }
 
   render(){
-    const { error, isLoaded, item, comments, liked, likes_count } = this.state;
+    const { error, isLoaded, item, comments, liked, likes_count, openMenusDropdown, menus } = this.state;
     if (error) {
       return <Redirect to={`/error/${error.code}/${error.message}`} />;
     } else if (!isLoaded) {
@@ -111,16 +161,17 @@ class Recipe extends Component{
         backgroundImage: `url(${item.image || DefaultImage})`
       };
 
-      // const date = new Date(Date.parse(item.created_at));
-
       return (
         <div className='recipe'>
           <div className='recipe--inner'>
             <div className='recipe--inner-col -bigger'>
               <div className='recipe--header' style={recipeImage}>
-                <Moment format="DD.MM.YYYY" className='recipe--info-date'>
-                  {item.created_at}
-                </Moment>
+                <div className='recipe--header-top-menu'>
+                  <Link to={`/recipes/${item.id}/edit`} className='link'>Edit recipe</Link>
+                  <Moment format="DD.MM.YYYY" className='recipe--info-date'>
+                    {item.created_at}
+                  </Moment>
+                </div>
                 <div className='recipe--header-info'>
                   <div className='recipe--header-info-title'>
                     {item.title}
@@ -140,13 +191,23 @@ class Recipe extends Component{
               <div className='recipe--sidebar'>
                 <div className='recipe--sidebar-block'>
                   <div className='recipe--sidebar-info-menu'>
-                    <div className='recipe--sidebar-info-menu-item' data-liked={liked} onClick={this.likeRecipe}>
-                      <FontAwesomeIcon icon={liked ? faHeartSolid : faHeartRegular} />
-                      <span>{likes_count || 0}</span>
+                    <div className='recipe--sidebar-info-menu-item' data-liked={liked}>
+                      <div className='recipe--sidebar-info-menu-item-inner' onClick={this.likeRecipe}>
+                        <FontAwesomeIcon icon={liked ? faHeartSolid : faHeartRegular} />
+                        <span>{likes_count || 0}</span>
+                      </div>
                     </div>
                     <div className='recipe--sidebar-info-menu-item'>
-                      <FontAwesomeIcon icon={faPlus} />
-                      <span>Add to menu</span>
+                      <div className='recipe--sidebar-info-menu-item-inner' onClick={this.toogleMenusDropdown}>
+                        <FontAwesomeIcon icon={faPlus} />
+                        <span>Add to menu</span>
+                      </div>
+                      {openMenusDropdown &&
+                        <div className='recipe--sidebar-menus'>
+                          {menus.map((o, i) =>
+                            <div className='recipe--sidebar-menus-item' key={i} data-id={o.id} onClick={this.addToMenu}>{o.title}</div>)}
+                          {!menus.length && <div className='recipe--sidebar-menus-item'>No-no-no</div>}
+                        </div>}
                     </div>
                   </div>
                   <div className='recipe--sidebar-block-inner'>
@@ -173,19 +234,19 @@ class Recipe extends Component{
                         type="text"
                         defaultValue={item.id}
                     />
-                      <textarea
-                          className="form--item -textarea"
-                          placeholder="Leave your comment here..."
-                          name="message"
-                          ref='message'
-                          onKeyDown={this.handleKeyDown}
-                          type="text"
-                      />
-                      <input
-                          className="form--submit"
-                          value="SUBMIT"
-                          type="submit"
-                      />
+                    <textarea
+                        className="form--item -textarea"
+                        placeholder="Leave your comment here..."
+                        name="message"
+                        ref='message'
+                        onKeyDown={this.handleKeyDown}
+                        type="text"
+                    />
+                    <input
+                        className="form--submit"
+                        value="SUBMIT"
+                        type="submit"
+                    />
                   </form>
                 </div>
               </div>

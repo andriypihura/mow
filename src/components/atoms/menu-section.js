@@ -4,6 +4,7 @@ import MenuItem from './menu-item.js';
 import './../../css/menu.css';
 
 class MenuSection extends Component{
+
   groupBy = (xs, key) => {
     return xs.reduce((rv, x) => {
       (rv[x[key]] = rv[x[key]] || []).push(x)
@@ -12,7 +13,7 @@ class MenuSection extends Component{
   }
 
   render(){
-    const { menu_items, day } = this.props
+    const { menu_items, day, menu_id } = this.props
     const grouped_menu_items = this.groupBy(menu_items, 'secondary_label')
 
     return (
@@ -21,9 +22,14 @@ class MenuSection extends Component{
         {
           ['1', '2', '3', '4', '5'].map((t, i) =>
             grouped_menu_items[t] &&
-              grouped_menu_items[t].map((item, j) =>
-                <MenuItem key={j} menu_item={item} />
-              )
+              <div className='menu--section-row'>
+                <div className='menu--section-row-number'>{t}</div>
+                <div className='menu--section-row-body'>
+                  {grouped_menu_items[t].map((item, j) =>
+                    <MenuItem key={j} menu_id={menu_id} menu_item={item} />
+                  )}
+                </div>
+              </div>
           )
         }
       </div>
