@@ -27,7 +27,6 @@ class Profile extends Component{
       .then(HandleErrors)
       .then(res => res.json())
       .then((result) => {
-        console.log(result);
         this.setState({
           isLoaded: true,
           item: result.user

@@ -14,7 +14,8 @@ class RecipePreview extends Component{
   }
 
   render(){
-    const { id, title, complexity, calories, image, time_consuming } = this.props.item
+    const { showIngredients } = this.props
+    const { id, title, complexity, calories, image, time_consuming, ingredients } = this.props.item
     const recipeImage = {
       backgroundImage: `url(${image || DefaultImage})`
     };
@@ -23,8 +24,10 @@ class RecipePreview extends Component{
     return (
       <div className="recipe-preview">
         <div className="recipe-preview--inner" style={recipeImage}>
-          <div className="recipe-preview--image">
-          </div>
+          {showIngredients && <div className='recipe-preview--ingredients-title'>Ingredients: </div> }
+          <ul className={`recipe-preview--ingredients ${showIngredients && '-bg'}`}>
+            {showIngredients && ingredients.split(',').map((obj, i) => <li key={i}>{obj}</li>)}
+          </ul>
           <div className="recipe-preview--text">
             <div className="recipe-preview--labels">
               <div className="label">

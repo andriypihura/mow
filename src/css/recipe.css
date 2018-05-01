@@ -39,20 +39,27 @@
   position: relative;
 }
 
-.recipe--header-info {
-  background-color: rgba(219, 219, 219, .5);
-  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-  height: 25%;
-  padding: 25px;
-  width: 100%;
-}
-
-.recipe--info-date {
+.recipe--header-top-menu {
   background-color: rgba(255, 255, 255, .9);
   position: absolute;
   right: 0;
   top: 0;
+  display: flex;
   padding: 15px;
+}
+
+.recipe--header-top-menu .link {
+  margin-right: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.recipe--header-info {
+  background-color: rgba(255, 255, 255, .9);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  height: 25%;
+  padding: 25px;
+  width: 100%;
 }
 
 .recipe--header-info-title {
@@ -85,8 +92,12 @@
 .recipe--sidebar-info-menu-item {
   flex: 1 1 50%;
   cursor: pointer;
-  padding: 15px;
   text-align: center;
+  position: relative;
+}
+
+.recipe--sidebar-info-menu-item-inner {
+  margin: 15px;
 }
 
 .recipe--sidebar-info-menu-item:hover {
@@ -100,6 +111,28 @@
 .recipe--sidebar-info-menu-item + .recipe--sidebar-info-menu-item {
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
   border-left: solid 2px #41403e;
+}
+
+.recipe--sidebar-menus {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background-color: rgba(255,255,255,.7);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  border: solid 2px #41403e;
+  border-top-color: rgba(255,255,255,1);
+  min-width: 100%;
+}
+
+.recipe--sidebar-menus-item {
+  cursor: pointer;
+  text-align: left;
+  padding: 5px 10px;
+  font-size: 1.2rem;
+}
+
+.recipe--sidebar-menus-item:hover {
+  background-color: rgba(0,0,0,.2);
 }
 
 .recipe--labels {
@@ -157,7 +190,7 @@
   border: solid 2px rgba(0, 0, 0, .3);
 }
 
-textarea {
+.recipe--comment-form textarea {
   outline: 0;
   border: 0!important;
   background-color: rgba(255, 255, 255, .0);

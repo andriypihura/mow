@@ -6,10 +6,35 @@
   padding: 15px 15px 0;
   width: calc(30% - 30px);
   height: 200px;
-  margin: 0 15px;
+  margin: 0 15px 20px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
+}
+
+.menu-preview.-empty {
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  padding: 0;
+  cursor: pointer
+}
+
+.menu-preview.-empty span {
+  font-size: 10rem;
+  margin-top: -35px;
+}
+
+.menu-preview--delete {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
+.menu-preview--delete:hover {
+  opacity: .8;
 }
 
 .menu-preview--title {
@@ -58,6 +83,12 @@
   text-align: center;
   padding: 5px 0;
   font-size: 1.2rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.menu-preview--actions-item.-active {
+  color: rgba(255, 127, 127, 1);
 }
 
 .menu-preview--actions-item + .menu-preview--actions-item {

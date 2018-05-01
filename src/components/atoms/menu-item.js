@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import './../../css/recipe-preview.css';
-import './../../css/link.css';
-import DefaultImage from './../../images/no-image.png';
+import MenuItemModal from './menu-item-modal.js';
 
-class MenuItem extends Component{
+class MenuItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalOpened: false
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(event) {
+    this.setState({ modalOpened: true })
+  }
+
+  handleCloseClick(event) {
+    event.stopPropagation()
+    this.setState({ modalOpened: false })
+  }
+
   text_truncate = (str, num, max) => {
     if(str.length < max){
       return str
@@ -14,11 +29,14 @@ class MenuItem extends Component{
   }
 
   render(){
+    const { modalOpened  } = this.state
+    const { menu_id } = this.props
     const { id, created_at  } = this.props.menu_item
     const { title, complexity, calories, image, time_consuming } = this.props.menu_item.recipe
 
     return (
-      <div className="recipe-preview -menu-item">
+      <div className="recipe-preview -menu-item" onClick={this.handleClick}>
+        {modalOpened && <MenuItemModal menu_item={this.props.menu_item} menu_id={menu_id} onClose={this.handleCloseClick.bind(this)}/>}
         <div className="recipe-preview--inner">
           <div className="recipe-preview--text">
             <div className="recipe-preview--labels">
