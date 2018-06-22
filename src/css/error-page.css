@@ -22,3 +22,13 @@
 .error-page--text-description {
   font-size: 3rem;
 }
+
+.error-page--button {
+  font-size: 2rem;
+  margin-top: 10px;
+}
+
+.error-page--button a.link {
+  font-size: 2rem;
+  margin: 0 10px;
+}

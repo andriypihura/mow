@@ -13,6 +13,7 @@ class Login extends Component {
       errors: false
     }
     this.handleSubmit = this.handleSubmit.bind(this);
+    console.log(this.props.match.params);
   }
 
   handleSubmit(event) {

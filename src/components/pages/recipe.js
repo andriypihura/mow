@@ -11,6 +11,7 @@ import './../../css/label.css';
 import DefaultImage from './../../images/no-image.png';
 import Loader from './../atoms/loader.js';
 import Comment from './../atoms/comment.js';
+import Notification from './../atoms/notification.js';
 import HandleErrors from './../helpers/error-handler.js';
 
 class Recipe extends Component{
@@ -26,7 +27,8 @@ class Recipe extends Component{
       openMenusDropdown: false,
       menus: [],
       comments: [],
-      deleted: false
+      deleted: false,
+      notification: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -51,7 +53,11 @@ class Recipe extends Component{
         const { value } = response
         this.setState({
           liked: value,
-          likes_count: this.state.likes_count + (value ? 1 : -1)
+          likes_count: this.state.likes_count + (value ? 1 : -1),
+          notification: { status: 'success',
+                          type: 'like',
+                          id: new Date().getTime(),
+                          value }
         })
       })
       .catch(error => this.setState({ error: error }))
@@ -96,7 +102,10 @@ class Recipe extends Component{
       .then(res => res.json())
       .then((response) => {
         this.setState({
-          openMenusDropdown: false
+          openMenusDropdown: false,
+          notification: { status: 'success',
+                          type: 'addToMenu',
+                          id: new Date().getTime() }
         })
       })
       .catch(error => this.setState({ error: error }))
@@ -170,7 +179,16 @@ class Recipe extends Component{
   }
 
   render(){
-    const { deleted, error, isLoaded, item, comments, liked, likes_count, openMenusDropdown, menus } = this.state;
+    const { notification,
+            deleted,
+            error,
+            isLoaded,
+            item,
+            comments,
+            liked,
+            likes_count,
+            openMenusDropdown,
+            menus } = this.state;
     if (error) {
       return <Redirect to={`/error/${error.code}/${error.message}`} />;
     } else if (deleted) {
@@ -184,6 +202,7 @@ class Recipe extends Component{
 
       return (
         <div className='recipe'>
+          <Notification notification={notification}/>
           <div className='recipe--inner'>
             <div className='recipe--inner-col -bigger'>
               <div className='recipe--header' style={recipeImage}>

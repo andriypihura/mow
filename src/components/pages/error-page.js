@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './../../css/error-page.css';
+import { Link } from 'react-router-dom';
 import { pageWrapper } from './page.js'
 
 class ErrorPage extends Component{
@@ -14,6 +15,11 @@ class ErrorPage extends Component{
             {this.props.match.params.message || 'Not Found'}
           </div>
         </div>
+        {this.props.match.params.code == 401 &&
+          <div className='error-page--button'>
+            You need to
+            <Link to="/login" className='link -pink'>log in</Link>
+          </div>}
       </div>
     );
   }

@@ -3,10 +3,6 @@ export const UnathorizedError = () => {
   sessionStorage.removeItem('user')
 }
 
-export const DefaultError = () => {
-  console.log('DefaultError');
-}
-
 export const HandleErrors = (response)=> {
   if(response.ok){
     return response;

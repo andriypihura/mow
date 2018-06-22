@@ -22,3 +22,8 @@
   color: #fff;
   background-image: linear-gradient(to top, #fff 0%, #fff 100%);
 }
+
+.link.-pink {
+  color: rgba(255, 127, 127, 1);
+  background-image: linear-gradient(to top, rgba(255, 127, 127, 1) 0%, rgba(255, 127, 127, 1) 100%);
+}
