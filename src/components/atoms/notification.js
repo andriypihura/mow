@@ -4,7 +4,12 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartSolid, faPlusCircle } from '@fortawesome/fontawesome-free-solid';
 import { faHeart as faHeartRegular } from '@fortawesome/fontawesome-free-regular';
 import './../../css/notification.css';
+
 const NOTIFY_TIMEOUT = 5000;
+const NOTIFICATION_TYPE = {
+  LIKE: 'like',
+  ADD_TO_MENU: 'addToMenu'
+};
 
 class Notification extends Component {
 
@@ -35,12 +40,12 @@ class Notification extends Component {
       message: null
     };
     switch (type) {
-    case 'like':
+    case NOTIFICATION_TYPE.LIKE:
       [info.icon, info.message] = value
         ? [faHeartSolid, 'You have liked the recipe']
         : [faHeartRegular, 'You have removed your like for the recipe'];
       break;
-    case 'addToMenu':
+    case NOTIFICATION_TYPE.ADD_TO_MENU:
       [info.icon, info.message] = [faPlusCircle, 'You have added the recipe to menu'];
       break;
     }
