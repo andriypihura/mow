@@ -6,7 +6,7 @@
   align-self: center;
 }
 
-.login--card{
+.login--card {
   background-color: #fff;
   padding: 0.8rem;
   width: 400px;
@@ -16,7 +16,7 @@
   border: solid 2px #41403e;
 }
 
-.login--card h1{
+.login--card h1 {
   text-align: center;
   margin-top: -10px;
   margin-bottom: 30px;
