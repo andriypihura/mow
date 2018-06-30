@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { pageWrapper } from './page.js';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import Moment from 'react-moment';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import { faHeart as faHeartSolid, faPlus, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
-import { faHeart as faHeartRegular } from '@fortawesome/fontawesome-free-regular'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { faHeart as faHeartSolid, faPlus } from '@fortawesome/fontawesome-free-solid';
+import { faHeart as faHeartRegular } from '@fortawesome/fontawesome-free-regular';
 import './../../css/recipe.css';
 import './../../css/label.css';
-import DefaultImage from './../../images/no-image.png';
+import defaultImage from './../../images/no-image.png';
 import Loader from './../atoms/loader.js';
 import Comment from './../atoms/comment.js';
 import Notification from './../atoms/notification.js';
 import HandleErrors from './../helpers/error-handler.js';
+import config from './../../config.js';
 
 class Recipe extends Component{
 
@@ -37,133 +39,132 @@ class Recipe extends Component{
     this.addToMenu = this.addToMenu.bind(this);
   }
 
-  likeRecipe(event) {
-    const { id } = this.state.item
-    fetch(`${process.env.REACT_APP_APIURL}/likes`,
-          { method: 'post',
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "recipe_id": id })
-          })
+  likeRecipe() {
+    fetch(`${config.REACT_APP_APIURL}/likes`,
+      { method: 'post',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'recipe_id': this.state.item.id })
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
-        const { value } = response
+        const { value } = response;
         this.setState({
           liked: value,
           likes_count: this.state.likes_count + (value ? 1 : -1),
-          notification: { status: 'success',
-                          type: 'like',
-                          id: new Date().getTime(),
-                          value }
-        })
+          notification: {
+            status: 'success',
+            type: 'like',
+            id: new Date().getTime(),
+            value }
+        });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
-  toogleMenusDropdown(event) {
+  toogleMenusDropdown() {
     if(this.state.openMenusDropdown){
-      this.setState({
-        openMenusDropdown: false
-      })
-      return
+      this.setState({ openMenusDropdown: false });
+      return;
     }
-    fetch(`${process.env.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus`,
-          { method: 'get',
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            }
-          })
+    fetch(`${config.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus`,
+      { method: 'get',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
         this.setState({
           openMenusDropdown: true,
           menus: response.menus
-        })
+        });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
   addToMenu(event) {
-    let menu_id = event.target.dataset.id
-    fetch(`${process.env.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus/${menu_id}/menu_items`,
-          { method: 'post',
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({"recipe_id": this.state.item.id, secondary_label: 1, primary_label: 'Sunday' })
-          })
+    const menu_id = event.target.dataset.id;
+    fetch(`${config.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus/${menu_id}/menu_items`,
+      { method: 'post',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'recipe_id': this.state.item.id, secondary_label: 1, primary_label: 'Sunday' })
+      })
       .then(HandleErrors)
       .then(res => res.json())
-      .then((response) => {
+      .then(() => {
         this.setState({
           openMenusDropdown: false,
-          notification: { status: 'success',
-                          type: 'addToMenu',
-                          id: new Date().getTime() }
-        })
+          notification: {
+            status: 'success',
+            type: 'addToMenu',
+            id: new Date().getTime()
+          }
+        });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
   handleKeyDown(event) {
-    if(event.keyCode == 13 && event.ctrlKey)
-      this.handleSubmit(event)
+    if(event.keyCode == 13 && event.ctrlKey) this.handleSubmit(event);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    const { message, recipe_id } = this.refs
-    fetch(`${process.env.REACT_APP_APIURL}/recipes/${recipe_id.value}/comments`,
-          { method: 'post',
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "message": message.value })
-          })
+    const { message, recipe_id } = this;
+    fetch(`${config.REACT_APP_APIURL}/recipes/${recipe_id.value}/comments`,
+      { method: 'post',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'message': message.value })
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
-        message.value = ''
+        message.value = '';
         this.setState({
           comments: [response, ...this.state.comments]
-        })
+        });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
-  onDelete(event) {
-    fetch(`${process.env.REACT_APP_APIURL}/recipes/${this.props.match.params.id}`,
-          { method: 'delete',
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            }
-          })
+  onDelete() {
+    fetch(`${config.REACT_APP_APIURL}/recipes/${this.props.match.params.id}`,
+      { method: 'delete',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
       .then(HandleErrors)
       .then(res => res.json())
-      .then((response) => {
+      .then(() => {
         this.setState({
           deleted: true
-        })
+        });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_APIURL}/recipes/${this.props.match.params.id}`,
-          { method: 'get',
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            }
-          })
+    fetch(`${config.REACT_APP_APIURL}/recipes/${this.props.match.params.id}`,
+      { method: 'get',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
@@ -175,20 +176,21 @@ class Recipe extends Component{
           comments: response.recipe.comments
         });
       })
-      .catch(error => this.setState({ isLoaded: true, error: error }))
+      .catch(error => this.setState({ isLoaded: true, error: error }));
   }
 
   render(){
-    const { notification,
-            deleted,
-            error,
-            isLoaded,
-            item,
-            comments,
-            liked,
-            likes_count,
-            openMenusDropdown,
-            menus } = this.state;
+    const {
+      notification,
+      deleted,
+      error,
+      isLoaded,
+      item,
+      comments,
+      liked,
+      likes_count,
+      openMenusDropdown,
+      menus } = this.state;
     if (error) {
       return <Redirect to={`/error/${error.code}/${error.message}`} />;
     } else if (deleted) {
@@ -197,7 +199,7 @@ class Recipe extends Component{
       return <Loader />;
     } else {
       const recipeImage = {
-        backgroundImage: `url(${item.image || DefaultImage})`
+        backgroundImage: `url(${item.image || defaultImage})`
       };
 
       return (
@@ -210,14 +212,17 @@ class Recipe extends Component{
                   {(sessionStorage.getItem('admin') || item.user.id == sessionStorage.getItem('user')) &&
                     <div
                       className='link'
-                      onClick={(event) => { if(window.confirm('Are you sure you wish to delete this item?')) this.onDelete(event)}}>
+                      onClick={(event) => {
+                        if(window.confirm('Are you sure you wish to delete this item?')) this.onDelete(event);
+                      }}
+                    >
                       Delete recipe
                     </div>
                   }
                   {(sessionStorage.getItem('admin') || item.user.id == sessionStorage.getItem('user')) &&
                     <Link to={`/recipes/${item.id}/edit`} className='link'>Edit recipe</Link>
                   }
-                  <Moment format="DD.MM.YYYY" className='recipe--info-date'>
+                  <Moment format='DD.MM.YYYY' className='recipe--info-date'>
                     {item.created_at}
                   </Moment>
                 </div>
@@ -275,26 +280,26 @@ class Recipe extends Component{
                 </div>
 
                 <div className='recipe--comment-form'>
-                  <form className="form" onSubmit={this.handleSubmit}>
+                  <form className='form' onSubmit={this.handleSubmit}>
                     <input
-                        className="form--item hidden"
-                        name="recipe_id"
-                        ref='recipe_id'
-                        type="text"
-                        defaultValue={item.id}
+                      className="form--item hidden"
+                      name="recipe_id"
+                      ref={(r) => this.recipe_id = r}
+                      type="text"
+                      defaultValue={item.id}
                     />
                     <textarea
-                        className="form--item -textarea"
-                        placeholder="Leave your comment here..."
-                        name="message"
-                        ref='message'
-                        onKeyDown={this.handleKeyDown}
-                        type="text"
+                      className="form--item -textarea"
+                      placeholder="Leave your comment here..."
+                      name="message"
+                      ref={(r) => this.message = r}
+                      onKeyDown={this.handleKeyDown}
+                      type="text"
                     />
                     <input
-                        className="form--submit"
-                        value="SUBMIT"
-                        type="submit"
+                      className="form--submit"
+                      value="SUBMIT"
+                      type="submit"
                     />
                   </form>
                 </div>
@@ -306,4 +311,9 @@ class Recipe extends Component{
     }
   }
 }
+
+Recipe.propTypes = {
+  match: PropTypes.object
+};
+
 export default pageWrapper(Recipe);

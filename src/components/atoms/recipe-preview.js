@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import './../../css/recipe-preview.css';
 import './../../css/link.css';
-import DefaultImage from './../../images/no-image.png';
+import defaultImage from './../../images/no-image.png';
 
 class RecipePreview extends Component{
-  text_truncate = (str, num, max) => {
-    if(str.length < max){
-      return str
-    } else {
-      return str.slice(0,num) + ' ...'
-    }
+  text_truncate(str, num, max) {
+    if(str.length < max) return str;
+    return str.slice(0,num) + ' ...';
   }
 
   render(){
-    const { showIngredients } = this.props
-    const { id, title, complexity, calories, image, time_consuming, ingredients } = this.props.item
-    const recipeImage = {
-      backgroundImage: `url(${image || DefaultImage})`
-    };
+    const { showIngredients } = this.props;
+    const { id, title, complexity, calories, image, time_consuming, ingredients } = this.props.item;
+    const recipeImage = { backgroundImage: `url(${image || defaultImage})` };
 
 
     return (
@@ -51,4 +47,10 @@ class RecipePreview extends Component{
     );
   }
 }
+
+RecipePreview.propTypes = {
+  showIngredients: PropTypes.bool,
+  item: PropTypes.object
+};
+
 export default RecipePreview;

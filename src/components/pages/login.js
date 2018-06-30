@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { pageWrapper } from './page.js'
+import { pageWrapper } from './page.js';
 import './../../css/login.css';
 import './../../css/form.css';
 import HandleErrors from './../helpers/error-handler.js';
+import config from './../../config.js';
 
 class Login extends Component {
   constructor(props) {
@@ -11,35 +12,33 @@ class Login extends Component {
     this.state = {
       submitted: false,
       errors: false
-    }
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
-    console.log(this.props.match.params);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    const { email, password } = this.refs
-    fetch(`${process.env.REACT_APP_APIURL}/authenticate`,
-          { method: 'post',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              "email": email.value,
-              "password": password.value
-            })
-          })
+    fetch(`${config.REACT_APP_APIURL}/authenticate`,
+      { method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'email': this.email.value,
+          'password': this.password.value
+        })
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((result) => {
         localStorage.setItem('token', result.auth_token);
         this.setState({submitted: true});
       })
-      .catch(error => this.setState({ errors: true }))
+      .catch(() => this.setState({ errors: true }));
   }
 
   render() {
-    const { submitted, errors } = this.state
+    const { submitted, errors } = this.state;
     if(!localStorage.getItem('token'))
       return (
         <div className="login">
@@ -47,25 +46,25 @@ class Login extends Component {
             <h1>Login</h1>
             {errors && <p>No-no-no, try again</p>}
             <form className="form" onSubmit={this.handleSubmit}>
-                <input
-                    className="form--item"
-                    placeholder="Username goes here..."
-                    name="email"
-                    ref='email'
-                    type="email"
-                />
-                <input
-                    className="form--item"
-                    placeholder="Password goes here..."
-                    name="password"
-                    ref='password'
-                    type="password"
-                />
-                <input
-                    className="form--submit"
-                    value="SUBMIT"
-                    type="submit"
-                />
+              <input
+                className="form--item"
+                placeholder="Username goes here..."
+                name="email"
+                ref={(r) => this.email = r}
+                type="email"
+              />
+              <input
+                className="form--item"
+                placeholder="Password goes here..."
+                name="password"
+                ref={(r) => this.password = r}
+                type="password"
+              />
+              <input
+                className="form--submit"
+                value="SUBMIT"
+                type="submit"
+              />
             </form>
             {submitted && (<Redirect to='/'/>)}
           </div>

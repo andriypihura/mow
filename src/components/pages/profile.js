@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { pageWrapper } from './page.js'
+import { pageWrapper } from './page.js';
 import { Redirect } from 'react-router-dom';
 import './../../css/profile.css';
 import './../../css/label.css';
-import DefaultImage from './../../images/no-image.png';
+import defaultImage from './../../images/no-image.png';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Moment from 'react-moment';
-import { faEdit } from '@fortawesome/fontawesome-free-regular'
-class Profile extends Component{
+import { faEdit } from '@fortawesome/fontawesome-free-regular';
+import config from './../../config.js';
 
+class Profile extends Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -20,19 +21,20 @@ class Profile extends Component{
       editNameMod: false,
       editEmailMod: false
     };
-    this.editNameMod = this.editNameMod.bind(this)
-    this.editEmailMod = this.editEmailMod.bind(this)
-    this.submitNameChange = this.submitNameChange.bind(this)
-    this.submitEmailChange = this.submitEmailChange.bind(this)
-    this.handleSubmitAvatar = this.handleSubmitAvatar.bind(this)
+    this.editNameMod = this.editNameMod.bind(this);
+    this.editEmailMod = this.editEmailMod.bind(this);
+    this.submitNameChange = this.submitNameChange.bind(this);
+    this.submitEmailChange = this.submitEmailChange.bind(this);
+    this.handleSubmitAvatar = this.handleSubmitAvatar.bind(this);
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_APIURL}/checkauth`,
-          { headers: {
-              "Authorization": `Beablabla ${localStorage.getItem('token')}`
-            }
-          })
+    fetch(`${config.REACT_APP_APIURL}/checkauth`,
+      {
+        headers: {
+          'Authorization': `Beablabla ${localStorage.getItem('token')}`
+        }
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
@@ -41,27 +43,26 @@ class Profile extends Component{
           item: response.user
         });
       })
-      .catch(error => this.setState({ isLoaded: true, error: error }))
+      .catch(error => this.setState({ isLoaded: true, error: error }));
   }
 
-  editNameMod(event) {
-    this.setState({editNameMod: true})
+  editNameMod() {
+    this.setState({ editNameMod: true });
   }
 
-  editEmailMod(event) {
-    this.setState({editEmailMod: true})
+  editEmailMod() {
+    this.setState({ editEmailMod: true });
   }
 
-  submitNameChange(event) {
-    const { name } = this.refs
-    fetch(`${process.env.REACT_APP_APIURL}/users/${this.state.item.id}`,
-          { method: 'put',
-            headers: {
-              "Authorization": `Beablabla ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 'name': name.value })
-          })
+  submitNameChange() {
+    fetch(`${config.REACT_APP_APIURL}/users/${this.state.item.id}`,
+      { method: 'put',
+        headers: {
+          'Authorization': `Beablabla ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'name': this.name.value })
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
@@ -70,19 +71,18 @@ class Profile extends Component{
           editNameMod: false
         });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
-  submitEmailChange(event) {
-    const { email } = this.refs
-    fetch(`${process.env.REACT_APP_APIURL}/users/${this.state.item.id}`,
-          { method: 'put',
-            headers: {
-              "Authorization": `Beablabla ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 'email': email.value })
-          })
+  submitEmailChange() {
+    fetch(`${config.REACT_APP_APIURL}/users/${this.state.item.id}`,
+      { method: 'put',
+        headers: {
+          'Authorization': `Beablabla ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'email': this.email.value })
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
@@ -91,32 +91,29 @@ class Profile extends Component{
           editEmailMod: false
         });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
   handleSubmitAvatar(event) {
-    event.preventDefault()
-    console.log('handleSubmitAvatar');
-    fetch(`${process.env.REACT_APP_APIURL}/users/${this.state.item.id}`,
-          { method: 'put',
-            headers: {
-              "Authorization": `Beablabla ${localStorage.getItem('token')}`
-            },
-            body: new FormData(event.target)
-          })
+    event.preventDefault();
+    fetch(`${config.REACT_APP_APIURL}/users/${this.state.item.id}`,
+      { method: 'put',
+        headers: {
+          'Authorization': `Beablabla ${localStorage.getItem('token')}`
+        },
+        body: new FormData(event.target)
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
-        console.log(response.user);
         this.setState({
           item: response.user
         });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
   render(){
-
     const { error, isLoaded, item, editNameMod, editEmailMod } = this.state;
     if (error) {
       return <Redirect to={`/error/${error.code}/${error.message}`} />;
@@ -124,7 +121,7 @@ class Profile extends Component{
       return <Loader />;
     } else {
       const profileImage = {
-        backgroundImage: `url(${item.avatar_url || DefaultImage})`
+        backgroundImage: `url(${item.avatar_url || defaultImage})`
       };
 
       return (
@@ -139,11 +136,11 @@ class Profile extends Component{
             {editNameMod &&
               <div className='profile--info-row -secondary'>
                 <input
-                  name="name"
-                  ref='name'
+                  name='name'
+                  ref={(r) => this.name = r}
                   type="text"
                   defaultValue={item.name}
-                  />
+                />
                 <span className='link' onClick={this.submitNameChange}>Submit</span>
               </div>}
             <div className='profile--info-row'>
@@ -179,10 +176,10 @@ class Profile extends Component{
                 <div className='profile--info-row'>
                   <input
                     name="email"
-                    ref='email'
+                    ref={(r) => this.email = r}
                     type="email"
                     defaultValue={item.email}
-                    />
+                  />
                   <span className='link' onClick={this.submitEmailChange}>Submit</span>
                 </div>}
             </div>
@@ -197,9 +194,9 @@ class Profile extends Component{
                   type="file" />
               </div>
               <input
-                  className="link"
-                  value="Submit"
-                  type="submit"
+                className="link"
+                value="Submit"
+                type="submit"
               />
             </form>
           </div>

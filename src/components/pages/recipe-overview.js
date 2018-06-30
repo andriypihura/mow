@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './../../css/recipe-overview.css';
 import RecipePreview from './../atoms/recipe-preview.js';
-import { pageWrapper } from './page.js'
+import { pageWrapper } from './page.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
+import config from './../../config.js';
 
 class RecipeOverview extends Component{
   constructor(props) {
@@ -19,22 +20,21 @@ class RecipeOverview extends Component{
     };
     this.loadMore = this.loadMore.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
-    this.changeType = this.changeType.bind(this);
+    this.toggleType = this.toggleType.bind(this);
   }
 
   loadMore(page) {
-    if(!page) page = 1
-    this.setState({ newRecipesReady: false })
-    if(this.state.pageCount < page)
-      return false;
+    if (!page) page = 1;
+    this.setState({ newRecipesReady: false });
+    if (this.state.pageCount < page) return false;
 
-    fetch(`${process.env.REACT_APP_APIURL}/recipes/overview?page=${page}&type=${this.state.type}`,
-          { method: 'get',
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            }
-          })
+    fetch(`${config.REACT_APP_APIURL}/recipes/overview?page=${page}&type=${this.state.type}`,
+      { method: 'get',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((result) => {
@@ -46,7 +46,7 @@ class RecipeOverview extends Component{
           pageCount: result.pageCount
         });
       })
-      .catch(error => this.setState({ isLoaded: true, error: error }))
+      .catch(error => this.setState({ isLoaded: true, error: error }));
   }
 
   componentDidMount() {
@@ -58,15 +58,14 @@ class RecipeOverview extends Component{
     window.removeEventListener('scroll', this.handleScroll);
   }
 
-  handleScroll(event) {
-    let scrollTop = document.documentElement.scrollTop
-    let targetOffsetTop = document.getElementById('js-mark-bottom').offsetTop
-    if(targetOffsetTop - scrollTop - window.innerHeight < 500 && this.state.newRecipesReady){
+  handleScroll() {
+    const scrollTop = document.documentElement.scrollTop;
+    const targetOffsetTop = document.getElementById('js-mark-bottom').offsetTop;
+    if(targetOffsetTop - scrollTop - window.innerHeight < 500 && this.state.newRecipesReady)
       this.loadMore(this.state.page + 1);
-    }
   }
 
-  changeType (newType) {
+  toggleType() {
     this.setState(
       {
         type: this.state.type === 'my' ? 'likes' : 'my',
@@ -75,7 +74,7 @@ class RecipeOverview extends Component{
         pageCount: 2
       },
       this.loadMore
-    )
+    );
   }
 
   render(){
@@ -88,10 +87,13 @@ class RecipeOverview extends Component{
       return (
         <div className='recipe-overview'>
           <div className='recipe-overview--switch-type'>
-            <div className={`recipe-overview--switch-type-item ${type === 'my'}`} onClick={(event) => {if (type !== 'my') this.changeType(event)}}>
+            <div
+              className={`recipe-overview--switch-type-item ${type === 'my'}`}
+              onClick={() => { if (type !== 'my') this.toggleType(); }}>
               Own recipes
             </div>
-            <div className={`recipe-overview--switch-type-item ${type === 'likes'}`} onClick={(event) => {if (type !== 'likes') this.changeType(event)}}>
+            <div className={`recipe-overview--switch-type-item ${type === 'likes'}`}
+              onClick={() => { if (type !== 'likes') this.toggleType(); }}>
               My likes
             </div>
           </div>
