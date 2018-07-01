@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Moment from 'react-moment';
-import DefaultImage from './../../images/no-image.png';
+import defaultImage from './../../images/no-image.png';
 import './../../css/comment.css';
 
 class Comment extends Component{
   render(){
     const { comment } = this.props;
     const avatar = {
-      backgroundImage: `url(${comment.user.avatar_url || DefaultImage})`
+      backgroundImage: `url(${comment.user.avatar_url || defaultImage})`
     };
 
     return (
@@ -31,4 +32,9 @@ class Comment extends Component{
     );
   }
 }
+
+Comment.propTypes = {
+  comment: PropTypes.object
+};
+
 export default Comment;

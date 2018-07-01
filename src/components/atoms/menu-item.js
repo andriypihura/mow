@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './../../css/recipe-preview.css';
 import MenuItemModal from './menu-item-modal.js';
 
@@ -11,32 +12,36 @@ class MenuItem extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(event) {
-    this.setState({ modalOpened: true })
+  handleClick() {
+    this.setState({ modalOpened: true });
   }
 
   handleCloseClick(event) {
-    event.stopPropagation()
-    this.setState({ modalOpened: false })
+    if(event) event.stopPropagation();
+    this.setState({ modalOpened: false });
   }
 
-  text_truncate = (str, num, max) => {
+  text_truncate(str, num, max) {
     if(str.length < max){
-      return str
+      return str;
     } else {
-      return str.slice(0,num) + ' ...'
+      return str.slice(0,num) + ' ...';
     }
   }
 
   render(){
-    const { modalOpened  } = this.state
-    const { menu_id } = this.props
-    const { id, created_at  } = this.props.menu_item
-    const { title, complexity, calories, image, time_consuming } = this.props.menu_item.recipe
+    const { modalOpened  } = this.state;
+    const { menuId } = this.props;
+    const { title, complexity, calories, time_consuming } = this.props.menuItem.recipe;
 
     return (
       <div className="recipe-preview -menu-item" onClick={this.handleClick}>
-        {modalOpened && <MenuItemModal menu_item={this.props.menu_item} menu_id={menu_id} onClose={this.handleCloseClick.bind(this)}/>}
+        {modalOpened &&
+          <MenuItemModal
+            menuItem={this.props.menuItem}
+            menuId={menuId}
+            onClose={this.handleCloseClick.bind(this)}
+            onChangeCallback={this.props.onMenuItemChangeCallback}/>}
         <div className="recipe-preview--inner">
           <div className="recipe-preview--text">
             <div className="recipe-preview--labels">
@@ -59,4 +64,11 @@ class MenuItem extends Component {
     );
   }
 }
+
+MenuItem.propTypes = {
+  menuItem: PropTypes.object,
+  menuId: PropTypes.number,
+  onMenuItemChangeCallback: PropTypes.func
+};
+
 export default MenuItem;

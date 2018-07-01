@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './../../css/error-page.css';
 import { Link } from 'react-router-dom';
-import { pageWrapper } from './page.js'
+import { pageWrapper } from './page.js';
 
 class ErrorPage extends Component{
   render(){
@@ -9,7 +10,7 @@ class ErrorPage extends Component{
       <div className='error-page'>
         <div className='error-page--smile'>
           :( {this.props.match.params.code || 404}
-          </div>
+        </div>
         <div className='error-page--text'>
           <div className='error-page--text-header'>
             {this.props.match.params.message || 'Not Found'}
@@ -24,4 +25,9 @@ class ErrorPage extends Component{
     );
   }
 }
+
+ErrorPage.propTypes = {
+  match: PropTypes.object
+};
+
 export default pageWrapper(ErrorPage);

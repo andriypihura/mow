@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { pageWrapper } from './page.js'
+import { pageWrapper } from './page.js';
 import './../../css/login.css';
 import './../../css/form.css';
 
@@ -9,7 +9,7 @@ class Logout extends Component {
     super(props);
     this.state = {
       submitted: false
-    }
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -21,18 +21,18 @@ class Logout extends Component {
   }
 
   render() {
-    const { submitted } = this.state
+    const { submitted } = this.state;
     if(localStorage.getItem('token'))
       return (
         <div className="login">
           <div className="login--card">
             <h1>Are you sure?</h1>
             <form className="form" onSubmit={this.handleSubmit}>
-                <input
-                    className="form--submit"
-                    value="SUBMIT"
-                    type="submit"
-                />
+              <input
+                className="form--submit"
+                value="SUBMIT"
+                type="submit"
+              />
             </form>
             {submitted && (<Redirect to='/'/>)}
           </div>

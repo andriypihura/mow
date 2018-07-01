@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './../../css/home.css';
 import RecipePreview from './../atoms/recipe-preview.js';
-import { pageWrapper } from './page.js'
+import { pageWrapper } from './page.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
+import config from './../../config.js';
 
 class Home extends Component{
   constructor(props) {
@@ -16,7 +17,7 @@ class Home extends Component{
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_APIURL}/recipes?page=1`)
+    fetch(`${config.REACT_APP_APIURL}/recipes?page=1`)
       .then(HandleErrors)
       .then(res => res.json())
       .then((result) => {
@@ -25,7 +26,7 @@ class Home extends Component{
           items: result.recipes
         });
       })
-      .catch(error => this.setState({ isLoaded: true, error: error }))
+      .catch(error => this.setState({ isLoaded: true, error: error }));
   }
 
   render(){

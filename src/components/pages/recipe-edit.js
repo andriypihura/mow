@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { pageWrapper } from './page.js';
 import './../../css/recipe-edit.css';
-import DefaultImage from './../../images/no-image.png';
 import { Redirect } from 'react-router-dom';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
+import config from './../../config.js';
 
-class RecipeEdit extends Component{
+class RecipeEdit extends Component {
 
   constructor(props) {
     super(props);
@@ -14,24 +15,30 @@ class RecipeEdit extends Component{
       error: null,
       updated: false,
       isLoaded: false,
-      createMod: false,
+      createMod: !this.props.match.params.id,
       item: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidUpdate() {
+    const createMod = !this.props.match.params.id;
+    if (createMod != this.state.createMod){
+      this.setState({ createMod });
+    }
+  }
   componentDidMount() {
     if (!this.props.match.params.id){
-      this.setState({isLoaded: true, createMod: true})
-      return
+      this.setState({isLoaded: true, createMod: true});
+      return;
     }
-    fetch(`${process.env.REACT_APP_APIURL}/recipes/${this.props.match.params.id}`,
-          { method: 'get',
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            }
-          })
+    fetch(`${config.REACT_APP_APIURL}/recipes/${this.props.match.params.id}`,
+      { method: 'get',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
@@ -40,31 +47,31 @@ class RecipeEdit extends Component{
           item: response.recipe
         });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    let fetchUrl = `${process.env.REACT_APP_APIURL}/recipes/${this.state.item.id}`
-    let fetchMethod = this.state.createMod ? 'post' :'put'
-    if (this.state.createMod)
-      fetchUrl = `${process.env.REACT_APP_APIURL}/recipes`
+    const [fetchMethod, fetchUrl] =
+      this.state.createMod
+        ? ['post', `${config.REACT_APP_APIURL}/recipes`]
+        : ['put', `${config.REACT_APP_APIURL}/recipes/${this.state.item.id}`];
     fetch(fetchUrl,
-          { method: fetchMethod,
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`
-            },
-            body: new FormData(event.target)
-          })
+      { method: fetchMethod,
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: new FormData(event.target)
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
         this.setState({
           updated: true,
           item: response.recipe
-        })
+        });
       })
-      .catch(error => this.setState({ error: error }))
+      .catch(error => this.setState({ error: error }));
   }
 
   render(){
@@ -76,19 +83,15 @@ class RecipeEdit extends Component{
     } else if (!isLoaded) {
       return <Loader />;
     } else {
-      const recipeImage = {
-        backgroundImage: `url(${item.image || DefaultImage})`
-      };
-
       return (
         <div className='recipe-edit'>
           <div className='recipe-edit--title'>{createMod ? 'Create recipe' : 'Edit recipe'}</div>
-          <form className="recipe-edit--form" onSubmit={this.handleSubmit}>
+          <form className='recipe-edit--form' onSubmit={this.handleSubmit}>
             <input
-                className="form--item hidden"
-                name="user_id"
-                type="text"
-                defaultValue={sessionStorage.getItem('user')}
+              className="form--item hidden"
+              name="user_id"
+              type="text"
+              defaultValue={sessionStorage.getItem('user')}
             />
             <div className="form--row">
               <label className="form--label" htmlFor='image'>
@@ -107,10 +110,10 @@ class RecipeEdit extends Component{
               </label>
               <div className="form--field">
                 <input
-                    className="form--item"
-                    name="title"
-                    type="text"
-                    defaultValue={item.title}
+                  className="form--item"
+                  name="title"
+                  type="text"
+                  defaultValue={item.title}
                 />
               </div>
             </div>
@@ -120,11 +123,11 @@ class RecipeEdit extends Component{
               </label>
               <div className="form--field">
                 <input
-                    className="form--item"
-                    name="time_consuming"
-                    min="0"
-                    type="number"
-                    defaultValue={item.time_consuming}
+                  className="form--item"
+                  name="time_consuming"
+                  min="0"
+                  type="number"
+                  defaultValue={item.time_consuming}
                 />
               </div>
             </div>
@@ -134,11 +137,11 @@ class RecipeEdit extends Component{
               </label>
               <div className="form--field">
                 <input
-                    className="form--item"
-                    name="calories"
-                    min="0"
-                    type="number"
-                    defaultValue={item.calories}
+                  className="form--item"
+                  name="calories"
+                  min="0"
+                  type="number"
+                  defaultValue={item.calories}
                 />
               </div>
             </div>
@@ -148,27 +151,27 @@ class RecipeEdit extends Component{
               </label>
               <div className="form--field -radio-set">
                 <input
-                    id="complexityHard"
-                    name="complexity"
-                    value='hard'
-                    type="radio"
-                    defaultChecked={item.complexity == 'hard'}
+                  id="complexityHard"
+                  name="complexity"
+                  value='hard'
+                  type="radio"
+                  defaultChecked={item.complexity == 'hard'}
                 />
                 <label htmlFor="complexityHard">Hard</label>
                 <input
-                    id="complexityNormal"
-                    name="complexity"
-                    value='normal'
-                    type="radio"
-                    defaultChecked={item.complexity == 'normal'}
+                  id="complexityNormal"
+                  name="complexity"
+                  value='normal'
+                  type="radio"
+                  defaultChecked={item.complexity == 'normal'}
                 />
                 <label htmlFor="complexityNormal">Normal</label>
                 <input
-                    id="complexityEasy"
-                    name="complexity"
-                    value='easy'
-                    type="radio"
-                    defaultChecked={item.complexity == 'easy'}
+                  id="complexityEasy"
+                  name="complexity"
+                  value='easy'
+                  type="radio"
+                  defaultChecked={item.complexity == 'easy'}
                 />
                 <label htmlFor="complexityEasy">Easy</label>
               </div>
@@ -179,10 +182,10 @@ class RecipeEdit extends Component{
               </label>
               <div className="form--field">
                 <textarea
-                    className="form--item -textarea"
-                    name="text"
-                    type="text"
-                    defaultValue={item.text}
+                  className="form--item -textarea"
+                  name="text"
+                  type="text"
+                  defaultValue={item.text}
                 />
               </div>
             </div>
@@ -195,10 +198,10 @@ class RecipeEdit extends Component{
               </label>
               <div className="form--field">
                 <textarea
-                    className="form--item -textarea"
-                    name="ingredients"
-                    type="text"
-                    defaultValue={item.ingredients}
+                  className="form--item -textarea"
+                  name="ingredients"
+                  type="text"
+                  defaultValue={item.ingredients}
                 />
               </div>
             </div>
@@ -209,27 +212,27 @@ class RecipeEdit extends Component{
                 </label>
                 <div className="form--field -radio-set">
                   <input
-                      id="visibilityForSelf"
-                      name="visibility"
-                      value='for_self'
-                      type="radio"
-                      defaultChecked={item.visibility == 'for_self'}
+                    id="visibilityForSelf"
+                    name="visibility"
+                    value='for_self'
+                    type="radio"
+                    defaultChecked={item.visibility == 'for_self'}
                   />
                   <label htmlFor="complexityHard">For self</label>
                   <input
-                      id="visibilityPublic"
-                      name="visibility"
-                      value='public'
-                      type="radio"
-                      defaultChecked={item.visibility == 'public'}
+                    id="visibilityPublic"
+                    name="visibility"
+                    value='public'
+                    type="radio"
+                    defaultChecked={item.visibility == 'public'}
                   />
                   <label htmlFor="complexityNormal">Public</label>
                 </div>
               </div>}
             <input
-                className="form--submit"
-                value="Submit"
-                type="submit"
+              className="form--submit"
+              value="Submit"
+              type="submit"
             />
           </form>
         </div>
@@ -237,4 +240,9 @@ class RecipeEdit extends Component{
     }
   }
 }
+
+RecipeEdit.propTypes = {
+  match: PropTypes.object
+};
+
 export default pageWrapper(RecipeEdit);

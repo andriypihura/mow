@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { pageWrapper } from './page.js'
+import { pageWrapper } from './page.js';
 import './../../css/login.css';
 import './../../css/form.css';
 import HandleErrors from './../helpers/error-handler.js';
+import config from './../../config.js';
 
 class Signup extends Component {
   constructor(props) {
@@ -11,35 +12,34 @@ class Signup extends Component {
     this.state = {
       submitted: false,
       errors: false
-    }
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    const { email, password, user_name, password_confirmation } = this.refs
-    fetch(`${process.env.REACT_APP_APIURL}/users`,
-          { method: 'post',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              "name": user_name.value,
-              "email": email.value,
-              "password": password.value,
-              "password_confirmation": password_confirmation.value
-            })
-          })
+    fetch(`${config.REACT_APP_APIURL}/users`,
+      { method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'name': this.user_name.value,
+          'email': this.email.value,
+          'password': this.password.value,
+          'password_confirmation': this.password_confirmation.value
+        })
+      })
       .then(HandleErrors)
       .then(res => res.json())
-      .then((result) => {
+      .then(() => {
         this.setState({submitted: true});
       })
-      .catch(error => this.setState({ errors: true }))
+      .catch(() => this.setState({ errors: true }));
   }
 
   render() {
-    const { submitted, errors } = this.state
+    const { submitted, errors } = this.state;
     if(!localStorage.getItem('token'))
       return (
         <div className="login">
@@ -48,37 +48,37 @@ class Signup extends Component {
             {errors && <p>No-no-no, try again</p>}
             <form className="form" onSubmit={this.handleSubmit}>
               <input
-                  className="form--item"
-                  placeholder="Username goes here..."
-                  name="user_name"
-                  ref='user_name'
-                  type="text"
+                className="form--item"
+                placeholder="Username goes here..."
+                name="user_name"
+                ref={(r) => this.user_name = r}
+                type="text"
               />
               <input
-                  className="form--item"
-                  placeholder="Email goes here..."
-                  name="email"
-                  ref='email'
-                  type="email"
+                className="form--item"
+                placeholder="Email goes here..."
+                name="email"
+                ref={(r) => this.email = r}
+                type="email"
               />
               <input
-                  className="form--item"
-                  placeholder="Password goes here..."
-                  name="password"
-                  ref='password'
-                  type="password"
+                className="form--item"
+                placeholder="Password goes here..."
+                name="password"
+                ref={(r) => this.password = r}
+                type="password"
               />
               <input
-                  className="form--item"
-                  placeholder="Password goes here..."
-                  name="password_confirmation"
-                  ref='password_confirmation'
-                  type="password"
+                className="form--item"
+                placeholder="Password goes here..."
+                name="password_confirmation"
+                ref={(r) => this.password_confirmation = r}
+                type="password"
               />
               <input
-                  className="form--submit"
-                  value="SUBMIT"
-                  type="submit"
+                className="form--submit"
+                value="SUBMIT"
+                type="submit"
               />
             </form>
             {submitted && (<Redirect to='/login'/>)}

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { pageWrapper } from './page.js';
 import { Redirect } from 'react-router-dom';
 import './../../css/menu.css';
 import Loader from './../atoms/loader.js';
 import MenuSection from './../atoms/menu-section.js';
 import HandleErrors from './../helpers/error-handler.js';
+import config from './../../config.js';
 
 class Menu extends Component{
 
@@ -14,38 +16,56 @@ class Menu extends Component{
       error: null,
       isLoaded: false,
       menu: {},
-      menu_items: []
+      menu_items: [],
+      groupedMenuItemsByDay: []
     };
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus/${this.props.match.params.id}`,
-          { method: 'get',
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            }
-          })
+    this.fetchMenuItemsData();
+  }
+
+  fetchMenuItemsData() {
+    fetch(`${config.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus/${this.props.match.params.id}`,
+      { method: 'get',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
       .then(HandleErrors)
       .then(res => res.json())
       .then((response) => {
         this.setState({
           isLoaded: true,
           menu: response.menu,
-          menu_items: response.menu.menu_items
+          menuItems: response.menu.menu_items,
+          groupedMenuItemsByDay: this.buildGroupedMenuDataByDay(response.menu.menu_items)
         });
       })
-      .catch(error => this.setState({ isLoaded: true, error: error }))
+      .catch(error => this.setState({ isLoaded: true, error: error }));
+  }
+
+  handleMenuItemChangeCallback() {
+    this.fetchMenuItemsData();
+  }
+
+  buildGroupedMenuDataByDay(data) {
+    let result = {};
+    ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((d) =>
+      result[d] = data.filter((item) => item.primary_label == d)
+    );
+    return result;
   }
 
   render(){
-    const { error, isLoaded, menu, menu_items } = this.state;
+    const { error, isLoaded, menu, groupedMenuItemsByDay } = this.state;
+
     if (error) {
       return <Redirect to={`/error/${error.code}/${error.message}`} />;
     } else if (!isLoaded) {
       return <Loader />;
     } else {
-
       return (
         <div className='menu'>
           <div className='menu--title-line'>
@@ -54,8 +74,13 @@ class Menu extends Component{
             </div>
           </div>
           <div className='menu--sections'>
-            {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((d, i) =>
-              <MenuSection key={i} day={d} menu_id={menu.id} menu_items={menu_items.filter((item) => item.primary_label == d)} />
+            {Object.keys(groupedMenuItemsByDay).map((key, i) =>
+              <MenuSection
+                key={i}
+                day={key}
+                menuId={menu.id}
+                menuItems={groupedMenuItemsByDay[key]}
+                onMenuItemChangeCallback={this.handleMenuItemChangeCallback.bind(this)} />
             )}
           </div>
         </div>
@@ -63,4 +88,9 @@ class Menu extends Component{
     }
   }
 }
+
+Menu.propTypes = {
+  match: PropTypes.object
+};
+
 export default pageWrapper(Menu, true);
