@@ -205,30 +205,29 @@ class RecipeEdit extends Component {
                 />
               </div>
             </div>
-            {sessionStorage.getItem('admin') &&
-              <div className="form--row">
-                <label className="form--label" htmlFor='calories'>
-                  Visibility
-                </label>
-                <div className="form--field -radio-set">
-                  <input
-                    id="visibilityForSelf"
-                    name="visibility"
-                    value='for_self'
-                    type="radio"
-                    defaultChecked={item.visibility == 'for_self'}
-                  />
-                  <label htmlFor="complexityHard">For self</label>
-                  <input
-                    id="visibilityPublic"
-                    name="visibility"
-                    value='public'
-                    type="radio"
-                    defaultChecked={item.visibility == 'public'}
-                  />
-                  <label htmlFor="complexityNormal">Public</label>
-                </div>
-              </div>}
+            <div className="form--row">
+              <label className="form--label" htmlFor='calories'>
+                Visibility
+              </label>
+              <div className="form--field -radio-set">
+                <input
+                  id="visibilityForSelf"
+                  name="visibility"
+                  value='for_self'
+                  type="radio"
+                  defaultChecked={item.visibility == 'for_self'}
+                />
+                <label htmlFor="complexityHard">For self</label>
+                <input
+                  id="visibilityPublic"
+                  name="visibility"
+                  value='public'
+                  type="radio"
+                  defaultChecked={item.visibility == 'public'}
+                />
+                <label htmlFor="complexityNormal">Public</label>
+              </div>
+            </div>
             <input
               className="form--submit"
               value="Submit"
