@@ -10,6 +10,7 @@ class MenuItem extends Component {
       modalOpened: false
     };
     this.handleClick = this.handleClick.bind(this);
+    this.handleOnMouseDown = this.handleOnMouseDown.bind(this);
   }
 
   handleClick() {
@@ -19,6 +20,10 @@ class MenuItem extends Component {
   handleCloseClick(event) {
     if(event) event.stopPropagation();
     this.setState({ modalOpened: false });
+  }
+
+  handleOnMouseDown(event) {
+    console.log(event.clientX, event.clientY);
   }
 
   text_truncate(str, num, max) {
@@ -35,7 +40,7 @@ class MenuItem extends Component {
     const { title, complexity, calories, time_consuming } = this.props.menuItem.recipe;
 
     return (
-      <div className="recipe-preview -menu-item" onClick={this.handleClick}>
+      <div className="recipe-preview -menu-item" onMouseDown={this.handleOnMouseDown} onMouseUp={this.handleOnMouseDown}>
         {modalOpened &&
           <MenuItemModal
             menuItem={this.props.menuItem}
