@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MenuItem from './menu-item.js';
+import { Scrollbars } from 'react-custom-scrollbars';
 import './../../css/menu.css';
 
 class MenuSection extends Component{
@@ -18,22 +19,25 @@ class MenuSection extends Component{
     return (
       <div className='menu--section'>
         <div className='menu--section-title'>{day}</div>
-        {
-          groupedMenuItemsByTime.map((menuItemsGroup, i) =>
-            menuItemsGroup[0] && <div className='menu--section-row' key={i}>
-              <div className='menu--section-row-number'>{menuItemsGroup[0].secondary_label}</div>
-              <div className='menu--section-row-body'>
-                {menuItemsGroup.map((item, j) =>
-                  <MenuItem
-                    key={j}
-                    menuId={menuId}
-                    menuItem={item}
-                    onMenuItemChangeCallback={this.props.onMenuItemChangeCallback} />
-                )}
-              </div>
-            </div>
-          )
-        }
+        <Scrollbars universal className='menu--section-body'>
+          {
+            groupedMenuItemsByTime.map((menuItemsGroup, i) =>
+              menuItemsGroup[0] &&
+                <div className='menu--section-row' key={i}>
+                  <div className='menu--section-row-number'>{menuItemsGroup[0].secondary_label}</div>
+                  <div className='menu--section-row-body'>
+                    {menuItemsGroup.map((item, j) =>
+                      <MenuItem
+                        key={j}
+                        menuId={menuId}
+                        menuItem={item}
+                        onMenuItemChangeCallback={this.props.onMenuItemChangeCallback} />
+                    )}
+                  </div>
+                </div>
+            )
+          }
+        </Scrollbars>
       </div>
     );
   }

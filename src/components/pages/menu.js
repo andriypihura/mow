@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { pageWrapper } from './page.js';
 import { Redirect } from 'react-router-dom';
 import './../../css/menu.css';
@@ -73,16 +74,21 @@ class Menu extends Component{
               {menu.title}
             </div>
           </div>
-          <div className='menu--sections'>
-            {Object.keys(groupedMenuItemsByDay).map((key, i) =>
-              <MenuSection
-                key={i}
-                day={key}
-                menuId={menu.id}
-                menuItems={groupedMenuItemsByDay[key]}
-                onMenuItemChangeCallback={this.handleMenuItemChangeCallback.bind(this)} />
-            )}
-          </div>
+          <Scrollbars
+            renderTrackVertical={props => <div {...props} className="track-vertical" style={{display:"none"}}/>}
+            renderThumbVertical={props => <div {...props} className="thumb-vertical" style={{display:"none"}}/>}
+            universal>
+            <div className='menu--sections'>
+              {Object.keys(groupedMenuItemsByDay).map((key, i) =>
+                <MenuSection
+                  key={i}
+                  day={key}
+                  menuId={menu.id}
+                  menuItems={groupedMenuItemsByDay[key]}
+                  onMenuItemChangeCallback={this.handleMenuItemChangeCallback.bind(this)} />
+              )}
+            </div>
+          </Scrollbars>
         </div>
       );
     }
