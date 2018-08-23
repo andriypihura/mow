@@ -75,8 +75,8 @@ class Menu extends Component{
             </div>
           </div>
           <Scrollbars
-            renderTrackVertical={props => <div {...props} className="track-vertical" style={{display:"none"}}/>}
-            renderThumbVertical={props => <div {...props} className="thumb-vertical" style={{display:"none"}}/>}
+            renderTrackVertical={props => <div {...props} className="track-vertical" style={{display:'none'}}/>}
+            renderThumbVertical={props => <div {...props} className="thumb-vertical" style={{display:'none'}}/>}
             universal>
             <div className='menu--sections'>
               {Object.keys(groupedMenuItemsByDay).map((key, i) =>
