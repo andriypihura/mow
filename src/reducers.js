@@ -1,14 +1,15 @@
 import { combineReducers } from 'redux';
 
-const addOne = (state = 0, action) => {
-  return state + 1;
-};
-
-const addTwo = (state = 10, action) => {
-  return state + 2;
+const page = (state = 'home', action) => {
+  switch(action.type) {
+  case 'CHANGE_PAGE':
+    console.log(action);
+    return action.payload;
+  default:
+    return state;
+  }
 };
 
 export default combineReducers({
-  addOne,
-  addTwo
+  page
 });
