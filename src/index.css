@@ -1,20 +1,19 @@
-@import url('https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700,800');
-@import url('https://fonts.googleapis.com/css?family=Shadows+Into+Light');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,600i,700,800&subset=cyrillic-ext');
 
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Dosis', sans-serif!important;
+  font-family: 'Open Sans', sans-serif!important;
   font-size: 16px;
 }
 
 input, textarea {
-  font-family: 'Dosis', sans-serif!important;
+  font-family: 'Open Sans', sans-serif!important;
 }
 
 * {
   box-sizing: border-box;
-  color: #41403e;
+  color: #423F40;
 }
 
 .hidden {

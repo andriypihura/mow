@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import Nav from './../atoms/nav.js';
+import TopNav from './../atoms/top-nav.js';
+import Sidebar from './../atoms/sidebar.js';
 import Footer from './../atoms/footer.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
 
-export const pageWrapper = (WrappedComponent, secondary) => {
+export const pageWrapper = (WrappedComponent, landing) => {
   class Wrapper extends Component {
     checkauth() {
       fetch(`${config.REACT_APP_APIURL}/checkauth`,
@@ -34,12 +35,15 @@ export const pageWrapper = (WrappedComponent, secondary) => {
       if(localStorage.getItem('token') && !sessionStorage.getItem('user'))
         this.checkauth();
       return (
-        <div className={secondary && 'app--inner -secondary' || 'app--inner'}>
-          <Nav />
+        <div className={`app--inner ${landing && '-landing'}`}>
+          {!landing && <Sidebar />}
           <div className='app--body'>
-            <WrappedComponent {...this.props}/>
+            {!landing && <TopNav />}
+            <div className='app--body-inner'>
+              <WrappedComponent {...this.props}/>
+            </div>
           </div>
-          {!secondary && <Footer />}
+          {landing && <Footer />}
         </div>
       );
     }

@@ -3,7 +3,8 @@
 }
 
 .home--recipes {
-  display: flex;
-  flex-wrap: wrap;
-  padding-top: 30px;
+  font-family: 'Shadows Into Light', cursive;
+  text-align: center;
+  font-size: 5rem;
+  padding-top: 100px;
 }
