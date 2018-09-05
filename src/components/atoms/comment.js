@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import defaultImage from './../../images/no-image.png';
-import './../../css/comment.css';
+// import './../../css/comment.css';
 
 class Comment extends Component{
   render(){

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import './../../css/search.css';
-import './../../css/form.css';
+// import './../../css/search.css';
+// import './../../css/form.css';
 import RecipePreview from './../atoms/recipe-preview.js';
-import { pageWrapper } from './page.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
@@ -207,4 +206,4 @@ class Search extends Component{
     }
   }
 }
-export default pageWrapper(Search);
+export default Search;

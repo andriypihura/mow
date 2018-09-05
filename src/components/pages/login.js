@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { pageWrapper } from './page.js';
-import './../../css/login.css';
-import './../../css/form.css';
+// import './../../css/login.css';
+// import './../../css/form.css';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
 
@@ -74,4 +73,4 @@ class Login extends Component {
   }
 }
 
-export default pageWrapper(Login);
+export default Login;

@@ -1,9 +1,8 @@
 import { combineReducers } from 'redux';
 
-const page = (state = 'home', action) => {
+const page = (state = '', action) => {
   switch(action.type) {
   case 'CHANGE_PAGE':
-    console.log(action);
     return action.payload;
   default:
     return state;

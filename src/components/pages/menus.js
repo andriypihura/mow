@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { pageWrapper } from './page.js';
 import { Redirect } from 'react-router-dom';
 import Loader from './../atoms/loader.js';
-import './../../css/menus.css';
+// import './../../css/menus.css';
 import MenuPreview from './../atoms/menu-preview.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
@@ -117,4 +116,4 @@ class Menus extends Component{
     }
   }
 }
-export default pageWrapper(Menus);
+export default Menus;

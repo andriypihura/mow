@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pageWrapper } from './page.js';
-import './../../css/recipe-edit.css';
+// import './../../css/recipe-edit.css';
 import { Redirect } from 'react-router-dom';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
@@ -244,4 +243,4 @@ RecipeEdit.propTypes = {
   match: PropTypes.object
 };
 
-export default pageWrapper(RecipeEdit);
+export default RecipeEdit;

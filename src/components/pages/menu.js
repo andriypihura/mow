@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { pageWrapper } from './page.js';
 import { Redirect } from 'react-router-dom';
-import './../../css/menu.css';
+// import './../../css/menu.css';
 import Loader from './../atoms/loader.js';
 import MenuSection from './../atoms/menu-section.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 class Menu extends Component{
 
@@ -43,6 +45,7 @@ class Menu extends Component{
           menuItems: response.menu.menu_items,
           groupedMenuItemsByDay: this.buildGroupedMenuDataByDay(response.menu.menu_items)
         });
+        this.props.changePage(`Menu: ${response.menu.title}`);
       })
       .catch(error => this.setState({ isLoaded: true, error: error }));
   }
@@ -96,7 +99,13 @@ class Menu extends Component{
 }
 
 Menu.propTypes = {
-  match: PropTypes.object
+  changePage: PropTypes.func
 };
 
-export default pageWrapper(Menu, true);
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    changePage: actions.changePage
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(Menu);

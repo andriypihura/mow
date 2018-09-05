@@ -13,27 +13,61 @@ import Profile from './components/pages/profile.js';
 import Menus from './components/pages/menus.js';
 import Menu from './components/pages/menu.js';
 import Search from './components/pages/search.js';
+import Dashboard from './components/pages/dashboard.js';
+import HandleErrors from './components/helpers/error-handler.js';
+import config from './config.js';
 
 class App extends Component {
+  checkauth() {
+    if(!localStorage.getItem('token'))
+      return;
+    fetch(`${config.REACT_APP_APIURL}/checkauth`,
+      { method: 'get',
+        headers: {
+          'Authorization': `Beablabla ${localStorage.getItem('token')}`
+        }
+      })
+      .then(HandleErrors)
+      .then(res => res.json())
+      .then((result) => {
+        sessionStorage.setItem('user', result.user.id);
+        if(result.user.avatar_url)
+          sessionStorage.setItem('user_avatar', result.user.avatar_url);
+        if(result.user.roles && result.user.roles.includes('admin')){
+          sessionStorage.setItem('admin', true);
+        } else {
+          sessionStorage.removeItem('admin');
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('user_avatar');
+        sessionStorage.removeItem('admin');
+      });
+  }
+
   render() {
+    setInterval(this.checkauth, 300000);
     return (
       <Router>
         <div className='app'>
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/logout" component={Logout} />
-            <Route exact path="/profile" component={Profile} />
-            <Route exact path="/menus" component={Menus} />
-            <Route exact path="/recipe-overview" component={RecipeOverview} />
-            <Route exact path="/recipes/:id" component={Recipe} />
-            <Route exact path="/recipes/:id/edit" component={RecipeEdit} />
-            <Route exact path="/create-recipe" component={RecipeEdit} />
-            <Route exact path="/menu/:id" component={Menu} />
-            <Route exact path="/search" component={Search} />
-            <Route exact path="/error/:code/:message" component={ErrorPage} />
-            <Route component={ErrorPage} />
+            <Dashboard>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/signup" component={Signup} />
+              <Route exact path="/logout" component={Logout} />
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/menus" component={Menus} />
+              <Route exact path="/recipe-overview" component={RecipeOverview} />
+              <Route exact path="/recipes/:id" component={Recipe} />
+              <Route exact path="/recipes/:id/edit" component={RecipeEdit} />
+              <Route exact path="/create-recipe" component={RecipeEdit} />
+              <Route exact path="/menu/:id" component={Menu} />
+              <Route exact path="/search" component={Search} />
+              <Route exact path="/error/:code/:message" component={ErrorPage} />
+            </Dashboard>
           </Switch>
         </div>
       </Router>

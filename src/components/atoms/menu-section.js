@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MenuItem from './menu-item.js';
 import { Scrollbars } from 'react-custom-scrollbars';
-import './../../css/menu.css';
+// import './../../css/menu.css';
 
 class MenuSection extends Component{
 

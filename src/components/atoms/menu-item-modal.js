@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import './../../css/menu-item-modal.css';
-import './../../css/label.css';
-import './../../css/recipe-preview.css';
+// import './../../css/menu-item-modal.css';
+// import './../../css/label.css';
+// import './../../css/recipe-preview.css';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/fontawesome-free-regular';
 import RecipePreview from './recipe-preview.js';

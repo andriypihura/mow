@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { pageWrapper } from './page.js';
 import { Redirect } from 'react-router-dom';
-import './../../css/profile.css';
-import './../../css/label.css';
+// import './../../css/profile.css';
+// import './../../css/label.css';
 import defaultImage from './../../images/no-image.png';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
@@ -205,4 +204,4 @@ class Profile extends Component{
     }
   }
 }
-export default pageWrapper(Profile);
+export default Profile;

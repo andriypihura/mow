@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import './../../css/recipe-preview.css';
-import './../../css/link.css';
+// import './../../css/recipe-preview.css';
+// import './../../css/link.css';
 import defaultImage from './../../images/no-image.png';
 
 class RecipePreview extends Component{

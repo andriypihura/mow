@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
-import './../../css/menu-preview.css';
+// import './../../css/menu-preview.css';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/fontawesome-free-regular';
 import HandleErrors from './../helpers/error-handler.js';

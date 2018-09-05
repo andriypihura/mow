@@ -10,8 +10,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -22,16 +20,31 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import SearchIcon from '@material-ui/icons/Search';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import Donut from './../../images/donut.svg';
 import defaultImage from './../../images/no-image.png';
 import './../../css/dashboard.css';
-
+import { Scrollbars } from 'react-custom-scrollbars';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
+  palette: {
+    primary: {
+      light: '#757ce8',
+      main: '#3f50b5',
+      dark: '#002884',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#ff7961',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+  },
   root: {
     display: 'flex',
   },
@@ -51,8 +64,6 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: '#2196f3',
-    color: '#ffffff',
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -108,23 +119,14 @@ const styles = theme => ({
 });
 
 class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: true,
-    };
-  }
-
-  handleDrawerOpen() {
-    this.setState({ open: true });
-  }
-
-  handleDrawerClose() {
-    this.setState({ open: false });
+  onLinkClick(e) {
+    this.props.changePage(
+      e.currentTarget.dataset.title
+    );
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, pageTitle } = this.props;
     const user_avatar = sessionStorage.getItem('user_avatar');
 
     return (
@@ -137,12 +139,21 @@ class Dashboard extends React.Component {
           >
             <Toolbar className={classes.toolbar}>
               <Typography variant="title" color="inherit" noWrap className={classes.title}>
-                Dashboard
+                {pageTitle}
               </Typography>
-              <IconButton color="inherit" component={Link} to='/profile'>
+              <IconButton
+                color="inherit"
+                onClick={this.onLinkClick.bind(this)}
+                component={Link}
+                data-title='Profile'
+                to='/profile'>
                 <Avatar src={user_avatar || defaultImage}/>
               </IconButton>
-              <IconButton button component={Link} to='/logout'>
+              <IconButton
+                onClick={this.onLinkClick.bind(this)}
+                component={Link}
+                data-title='Logout'
+                to='/logout'>
                 <ExitToAppIcon />
               </IconButton>
             </Toolbar>
@@ -150,47 +161,76 @@ class Dashboard extends React.Component {
           <Drawer
             variant="permanent"
             classes={{
-              paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+              paper: classNames(classes.drawerPaper),
             }}
-            open={this.state.open}
+            open={true}
           >
-            <div className='dashboard--logo'>
-              <img src={Donut} alt="Donut" />
+            <Link to='/' className='dashboard--logo' color='primary'>
+              <img src={Donut} data-title="Donut" />
               Menu on web
-            </div>
+            </Link>
             <List>
               <div>
-                <ListItem button component={Link} to='/menus'>
+                <ListItem
+                  button
+                  onClick={this.onLinkClick.bind(this)}
+                  component={Link}
+                  data-title='Menus' to='/menus'>
                   <ListItemIcon>
                     <DashboardIcon />
                   </ListItemIcon>
                   <ListItemText primary="Menus" />
                 </ListItem>
-                <ListItem button component={Link} to='/recipe-overview'>
+                <ListItem
+                  button
+                  onClick={this.onLinkClick.bind(this)}
+                  component={Link}
+                  data-title='Recipe overview'
+                  to='/recipe-overview'>
                   <ListItemIcon>
                     <ViewListIcon />
                   </ListItemIcon>
                   <ListItemText primary="Recipe overview" />
                 </ListItem>
-                <ListItem button component={Link} to='/create-recipe'>
+                <ListItem
+                  button
+                  onClick={this.onLinkClick.bind(this)}
+                  component={Link}
+                  data-title='New recipe'
+                  to='/create-recipe'>
                   <ListItemIcon>
                     <NoteAddIcon />
                   </ListItemIcon>
                   <ListItemText primary="Add recipe" />
                 </ListItem>
-                <ListItem button component={Link} to='/profile'>
+                <ListItem
+                  button
+                  onClick={this.onLinkClick.bind(this)}
+                  component={Link}
+                  data-title='Profile'
+                  to='/profile'>
                   <ListItemIcon>
                     <BarChartIcon />
                   </ListItemIcon>
                   <ListItemText primary="Profile" />
                 </ListItem>
-                <ListItem button component={Link} to='/search'>
+                <ListItem
+                  button
+                  onClick={this.onLinkClick.bind(this)}
+                  component={Link}
+                  data-title='Search'
+                  to='/search'>
                   <ListItemIcon>
                     <SearchIcon />
                   </ListItemIcon>
                   <ListItemText primary="Search" />
                 </ListItem>
-                <ListItem button component={Link} to='/logout'>
+                <ListItem
+                  button
+                  onClick={this.onLinkClick.bind(this)}
+                  component={Link}
+                  data-title='Logout'
+                  to='/logout'>
                   <ListItemIcon>
                     <ExitToAppIcon />
                   </ListItemIcon>
@@ -200,7 +240,11 @@ class Dashboard extends React.Component {
             </List>
           </Drawer>
           <main className={classes.content}>
-            {this.props.children}
+            <Scrollbars universal>
+              <div className='app--body'>
+                {this.props.children}
+              </div>
+            </Scrollbars>
           </main>
         </div>
       </React.Fragment>
@@ -210,7 +254,21 @@ class Dashboard extends React.Component {
 
 Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
-  children: PropTypes.object
+  children: PropTypes.array,
+  changePage: PropTypes.func,
+  pageTitle: PropTypes.string
 };
 
-export default withStyles(styles)(Dashboard);
+const mapStateToProps = state => {
+  return {
+    pageTitle: state.page
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    changePage: actions.changePage
+  }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard));

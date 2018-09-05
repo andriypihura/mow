@@ -2,8 +2,9 @@
   color: #fff!important;
 }
 
-main.Dashboard-content-12 {
-  padding-top: 88px;
+main {
+  padding-top: 88px!important;
+  padding-right: 10px!important;
 }
 
 .dashboard--logo {
@@ -15,6 +16,7 @@ main.Dashboard-content-12 {
   font-size: 25px;
   font-family: sans-serif;
   margin-bottom: 20px;
+  text-decoration: none;
 }
 
 .dashboard--logo img {

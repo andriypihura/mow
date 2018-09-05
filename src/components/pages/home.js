@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import './../../css/home.css';
+// import './../../css/home.css';
 import RecipePreview from './../atoms/recipe-preview.js';
-import { pageWrapper } from './page.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
@@ -46,4 +45,4 @@ class Home extends Component{
     }
   }
 }
-export default pageWrapper(Home);
+export default Home;

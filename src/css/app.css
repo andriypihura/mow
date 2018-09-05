@@ -1,3 +1,7 @@
 .app {
   background-color: #fafafa;
 }
+
+.app--body {
+  padding-right: 15px;
+}

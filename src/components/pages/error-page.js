@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './../../css/error-page.css';
+// import './../../css/error-page.css';
 import { Link } from 'react-router-dom';
-import { pageWrapper } from './page.js';
 
 class ErrorPage extends Component{
   render(){
@@ -30,4 +29,4 @@ ErrorPage.propTypes = {
   match: PropTypes.object
 };
 
-export default pageWrapper(ErrorPage);
+export default ErrorPage;
