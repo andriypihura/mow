@@ -15,13 +15,17 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import SearchIcon from '@material-ui/icons/Search';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Logo from './../../images/logo.svg';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Donut from './../../images/donut.svg';
+import defaultImage from './../../images/no-image.png';
 import './../../css/dashboard.css';
 
 
@@ -121,6 +125,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const user_avatar = sessionStorage.getItem('user_avatar');
 
     return (
       <React.Fragment>
@@ -134,10 +139,11 @@ class Dashboard extends React.Component {
               <Typography variant="title" color="inherit" noWrap className={classes.title}>
                 Dashboard
               </Typography>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
+              <IconButton color="inherit" component={Link} to='/profile'>
+                <Avatar src={user_avatar || defaultImage}/>
+              </IconButton>
+              <IconButton button component={Link} to='/logout'>
+                <ExitToAppIcon />
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -149,11 +155,12 @@ class Dashboard extends React.Component {
             open={this.state.open}
           >
             <div className='dashboard--logo'>
-              <img src={Logo} alt="Logo" />
+              <img src={Donut} alt="Donut" />
+              Menu on web
             </div>
             <List>
               <div>
-                <ListItem button  component={Link} to='/menus'>
+                <ListItem button component={Link} to='/menus'>
                   <ListItemIcon>
                     <DashboardIcon />
                   </ListItemIcon>

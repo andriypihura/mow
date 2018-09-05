@@ -17,6 +17,7 @@ class Logout extends Component {
     event.preventDefault();
     localStorage.removeItem('token');
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('user_avatar');
     this.setState({submitted: true});
   }
 

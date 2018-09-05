@@ -8,4 +8,16 @@ main.Dashboard-content-12 {
 
 .dashboard--logo {
   padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-transform: lowercase;
+  font-size: 25px;
+  font-family: sans-serif;
+  margin-bottom: 20px;
+}
+
+.dashboard--logo img {
+  height: 70px;
+  margin-bottom: 10px;
 }

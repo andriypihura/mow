@@ -1,6 +1,7 @@
 export const UnathorizedError = () => {
   localStorage.removeItem('token');
   sessionStorage.removeItem('user');
+  sessionStorage.removeItem('user_avatar');
 };
 
 export const HandleErrors = (response)=> {

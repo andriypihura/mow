@@ -207,4 +207,4 @@ class Search extends Component{
     }
   }
 }
-export default pageWrapper(Search, true);
+export default pageWrapper(Search);

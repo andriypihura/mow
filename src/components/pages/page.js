@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import Nav from './../atoms/nav.js';
-import Footer from './../atoms/footer.js';
 import HandleErrors from './../helpers/error-handler.js';
 import Dashboard from './dashboard.js';
 import config from './../../config.js';
 
-export const pageWrapper = (WrappedComponent, secondary) => {
+export const pageWrapper = (WrappedComponent) => {
   class Wrapper extends Component {
     checkauth() {
       fetch(`${config.REACT_APP_APIURL}/checkauth`,
@@ -18,6 +16,8 @@ export const pageWrapper = (WrappedComponent, secondary) => {
         .then(res => res.json())
         .then((result) => {
           sessionStorage.setItem('user', result.user.id);
+          if(result.user.avatar_url)
+            sessionStorage.setItem('user_avatar', result.user.avatar_url);
           if(result.user.roles && result.user.roles.includes('admin')){
             sessionStorage.setItem('admin', true);
           } else {
@@ -27,6 +27,7 @@ export const pageWrapper = (WrappedComponent, secondary) => {
         .catch(() => {
           localStorage.removeItem('token');
           sessionStorage.removeItem('user');
+          sessionStorage.removeItem('user_avatar');
           sessionStorage.removeItem('admin');
         });
     }
