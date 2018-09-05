@@ -165,7 +165,11 @@ class Dashboard extends React.Component {
             }}
             open={true}
           >
-            <Link to='/' className='dashboard--logo' color='primary'>
+            <Link
+              to='/'
+              onClick={this.onLinkClick.bind(this)}
+              className='dashboard--logo'
+              data-title='Home'>
               <img src={Donut} data-title="Donut" />
               Menu on web
             </Link>
