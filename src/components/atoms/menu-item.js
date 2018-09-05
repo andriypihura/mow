@@ -56,7 +56,7 @@ class MenuItem extends Component {
               </div>
             </div>
             <div className="recipe-preview--title">
-              {this.text_truncate(title, 15, 18)}
+              {this.text_truncate(title, 25, 28)}
             </div>
           </div>
         </div>
