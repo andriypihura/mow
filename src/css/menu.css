@@ -5,6 +5,16 @@
   flex-direction: column;
 }
 
+.menu * {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
 .menu--title {
   font-size: 2rem;
   text-transform: uppercase;
@@ -13,24 +23,27 @@
 }
 
 .menu--sections {
-  display: flex;
-  width: 100%;
   height: 100%;
-  flex-direction: column;
+  display: flex;
+  width: max-content;
 }
 
 .menu--sections-inner {
   padding: 20px 0;
-  flex: 1 1 auto;
 }
 
 .menu--section {
   background-color: rgba(255, 255, 255, .5);
-  width: 100%;
+  width: 350px;
+  max-height: 100%;
   margin: 0 0 20px 0;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
-  padding-bottom: 20px;
+  padding: 0 5px 20px 20px;
+}
+
+.menu--section + .menu--section {
+  margin-left: 15px;
 }
 
 .menu--section-title {
@@ -42,6 +55,7 @@
 .menu--section-row {
   align-items: center;
   display: flex;
+  flex-direction: column;
 }
 
 .menu--section-row + .menu--section-row {
@@ -55,7 +69,12 @@
 
 .menu--section-row-body {
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
+}
+
+.menu--section-body > div:nth-child(1) {
+  padding-right: 15px!important;
 }
 
 .menu--section .recipe-preview {
