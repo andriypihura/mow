@@ -1,0 +1,8 @@
+.home--recipes {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.home--recipes > div {
+  margin: 15px;
+}

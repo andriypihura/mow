@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
@@ -118,7 +118,7 @@ const styles = theme => ({
   },
 });
 
-class Dashboard extends React.Component {
+class Dashboard extends Component {
   onLinkClick(e) {
     this.props.changePage(
       e.currentTarget.dataset.title

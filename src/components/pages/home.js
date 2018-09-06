@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-// import './../../css/home.css';
 import RecipePreview from './../atoms/recipe-preview.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
+import './../../css/home.css';
 
 class Home extends Component{
   constructor(props) {
