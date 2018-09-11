@@ -3,103 +3,89 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
-// import './../../css/menu-preview.css';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { faTimesCircle } from '@fortawesome/fontawesome-free-regular';
-import HandleErrors from './../helpers/error-handler.js';
-import config from './../../config.js';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+const styles = {
+  card: {
+    minWidth: 275,
+    maxWidth: 345,
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    marginBottom: 16,
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+  infoLine: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+};
 
 class MenuPreview extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      editMod: false,
       menu: this.props.item
     };
-    this.handleUpdate = this.handleUpdate.bind(this);
-    this.toogleEditMod = this.toogleEditMod.bind(this);
-  }
-
-  toogleEditMod() {
-    if(this.state.editMod) this.handleUpdate();
-    this.setState({
-      editMod: !this.state.editMod
-    });
-  }
-
-  handleUpdate() {
-    fetch(`${config.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus/${this.props.item.id}`,
-      { method: 'put',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({'title': this.title.value })
-      })
-      .then(HandleErrors)
-      .then(res => res.json())
-      .then((response) => {
-        this.setState({
-          editMod: false,
-          menu: response.menu
-        });
-      })
-      .catch(error => this.setState({error}));
   }
 
   render(){
-    const { error, editMod } = this.state;
+    const { classes } = this.props;
+    const { error } = this.state;
     const { id, title, created_at, updated_at } = this.state.menu;
     if (error) {
       return <Redirect to={`/error/${error.code}/${error.message}`} />;
     } else {
       return (
-        <div className='menu-preview'>
-          <FontAwesomeIcon
-            icon={faTimesCircle}
-            className="menu-preview--delete"
-            onClick={() => {if(window.confirm('Are you sure you wish to delete this item?')) this.props.onDelete(id);}} />
-          <div className='menu-preview--title'>
-            {editMod &&
-              <input
-                className="form--item"
-                name="title"
-                ref={(r) => this.title = r}
-                type="text"
-                defaultValue={title}
-              /> || title}
-          </div>
-          <div className='menu-preview--info'>
-            <div className='menu-preview--info-item'>
-              <div className='menu-preview--info-label'>
-                Created at
-              </div>
-              <Moment format="DD.MM.YYYY" className='menu-preview--info-text'>
-                {created_at}
-              </Moment>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography variant="headline" component="h2">
+              {title}
+            </Typography>
+            <div className={classes.infoLine}>
+              <Typography component="p">
+                Created at:
+              </Typography>
+              <Typography component="p">
+                <Moment format="DD.MM.YYYY">
+                  {created_at}
+                </Moment>
+              </Typography>
             </div>
-
-            <div className='menu-preview--info-item'>
-              <div className='menu-preview--info-label'>
-                Updated at
-              </div>
-              <Moment format="DD.MM.YYYY" className='menu-preview--info-text'>
-                {updated_at}
-              </Moment>
+            <div className={classes.infoLine}>
+              <Typography component="p">
+                Updated at:
+              </Typography>
+              <Typography component="p">
+                <Moment format="DD.MM.YYYY">
+                  {updated_at}
+                </Moment>
+              </Typography>
             </div>
-          </div>
-          <div className='menu-preview--actions'>
-            <div className='menu-preview--actions-inner'>
-              <Link to={`/menu/${id}`} className='menu-preview--actions-item'>
-                View recipes
-              </Link>
-
-              <div className={`menu-preview--actions-item ${editMod && '-active'}`} onClick={this.toogleEditMod}>
-                { editMod && 'Save' || 'Edit menu'}
-              </div>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+          <CardActions>
+            <Button size="small" component={Link} to={`/menu/${id}`}>
+              Open
+            </Button>
+            <Button
+              size="small"
+              onClick={() => {if(window.confirm('Are you sure you wish to delete this item?')) this.props.onDelete(id);}}>
+              Delete
+            </Button>
+          </CardActions>
+        </Card>
       );
     }
   }
@@ -107,7 +93,8 @@ class MenuPreview extends Component{
 
 MenuPreview.propTypes = {
   item: PropTypes.object,
+  classes: PropTypes.object.isRequired,
   onDelete: PropTypes.func
 };
 
-export default MenuPreview;
+export default withStyles(styles)(MenuPreview);

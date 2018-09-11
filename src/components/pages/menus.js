@@ -1,10 +1,31 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import Loader from './../atoms/loader.js';
-// import './../../css/menus.css';
 import MenuPreview from './../atoms/menu-preview.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+
+const styles = {
+  card: {
+    minWidth: 275,
+    maxWidth: 345,
+  },
+  cardContentEmpty: {
+    width: '100%',
+    height: '100%',
+    fontSize: '70px',
+    textAlign: 'center',
+    lineHeight: '1.5',
+    cursor: 'pointer',
+  }
+};
 
 class Menus extends Component{
 
@@ -17,12 +38,20 @@ class Menus extends Component{
       createMod: false
     };
     this.openCreateMod = this.openCreateMod.bind(this);
+    this.closeCreateMod = this.closeCreateMod.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
   }
 
   openCreateMod() {
     this.setState({
       createMod: true
+    });
+  }
+
+  closeCreateMod() {
+    this.title = '';
+    this.setState({
+      createMod: false
     });
   }
 
@@ -40,10 +69,10 @@ class Menus extends Component{
       .then((response) => {
         this.setState({
           createMod: false,
-          menus: this.state.menus + response.menu
+          menus: this.state.menus.concat([response.menu])
         });
       })
-      .catch(error => this.setState({ isLoaded: true, error: error }));
+      .catch(error => this.setState({ error }));
   }
 
   onDelete(menu_id) {
@@ -61,10 +90,11 @@ class Menus extends Component{
           menus: this.state.menus.filter(m => m.id !== menu_id)
         });
       })
-      .catch(error => this.setState({ isLoaded: true, error: error }));
+      .catch(error => this.setState({ error }));
   }
 
   componentDidMount() {
+    console.log('componentDidMount');
     fetch(`${config.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus`,
       { method: 'get',
         headers: {
@@ -80,10 +110,11 @@ class Menus extends Component{
           menus: response.menus
         });
       })
-      .catch(error => this.setState({ isLoaded: true, error: error }));
+      .catch(error => this.setState({ error }));
   }
 
   render(){
+    const { classes } = this.props;
     const { error, isLoaded, menus, createMod } = this.state;
     if (error) {
       return <Redirect to={`/error/${error.code}/${error.message}`} />;
@@ -91,29 +122,48 @@ class Menus extends Component{
       return <Loader />;
     } else {
       return (
-        <div className='menus'>
+        <div className='flex-container'>
           {menus.map((object) => <MenuPreview key={object.id} item={object} onDelete={this.onDelete.bind(this)} />)}
-          <div className='menu-preview -empty'>
-            {!createMod && <span onClick={this.openCreateMod}>+</span>}
-            {createMod &&
-              <form className="form" onSubmit={this.handleCreate}>
-                <input
-                  className="form--item"
-                  placeholder="Manu title goes here..."
+          {createMod &&
+            <Card className={classes.card}>
+              <CardContent>
+                <TextField
+                  label="Menu name"
+                  id="margin-dense"
+                  className={classes.textField}
+                  helperText="Come up with a title"
+                  inputRef={(r) => this.title = r}
                   name="title"
-                  ref={(r) => this.title = r}
-                  type="text"
+                  margin="dense"
                 />
-                <input
-                  className="form--submit"
-                  value="SUBMIT"
-                  type="submit"
-                />
-              </form>}
-          </div>
+              </CardContent>
+              <CardActions>
+                <Button size="small" onClick={this.handleCreate}>
+                  Create
+                </Button>
+                <Button size="small" onClick={this.closeCreateMod}>
+                  Cancel
+                </Button>
+              </CardActions>
+            </Card> ||
+            <Card className={classes.card}>
+              <CardContent
+                className={classes.cardContentEmpty}
+                onClick={this.openCreateMod}>
+                +
+              </CardContent>
+            </Card>
+          }
         </div>
       );
     }
   }
 }
-export default Menus;
+
+Menus.propTypes = {
+  showIngredients: PropTypes.bool,
+  classes: PropTypes.object.isRequired,
+  item: PropTypes.object
+};
+
+export default withStyles(styles)(Menus);

@@ -3,7 +3,6 @@ import RecipePreview from './../atoms/recipe-preview.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
-import './../../css/home.css';
 
 class Home extends Component{
   constructor(props) {
@@ -36,10 +35,8 @@ class Home extends Component{
       return <Loader />;
     } else {
       return (
-        <div className='home'>
-          <div className='home--recipes'>
-            {items.map((object, i) => <RecipePreview key={i} item={object} />)}
-          </div>
+        <div className='flex-container'>
+          {items.map((object, i) => <RecipePreview key={i} item={object} />)}
         </div>
       );
     }

@@ -17,6 +17,7 @@ const styles = {
   card: {
     display: 'flex',
     flexDirection: 'column',
+    minWidth: 275,
     maxWidth: 345,
   },
   media: {

@@ -17,6 +17,7 @@ import Avatar from '@material-ui/core/Avatar';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import ViewListIcon from '@material-ui/icons/ViewList';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import SearchIcon from '@material-ui/icons/Search';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -189,12 +190,23 @@ class Dashboard extends Component {
                   button
                   onClick={this.onLinkClick.bind(this)}
                   component={Link}
-                  data-title='Recipe overview'
-                  to='/recipe-overview'>
+                  data-title='Own recipes'
+                  to='/own-recipes'>
                   <ListItemIcon>
                     <ViewListIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Recipe overview" />
+                  <ListItemText primary="Own recipes" />
+                </ListItem>
+                <ListItem
+                  button
+                  onClick={this.onLinkClick.bind(this)}
+                  component={Link}
+                  data-title='Favorites'
+                  to='/favorites'>
+                  <ListItemIcon>
+                    <FavoriteIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Favorites" />
                 </ListItem>
                 <ListItem
                   button

@@ -4,7 +4,8 @@ import './css/app.css';
 import Home from './components/pages/home.js';
 import Recipe from './components/pages/recipe.js';
 import RecipeEdit from './components/pages/recipe-edit.js';
-import RecipeOverview from './components/pages/recipe-overview.js';
+import OwnRecipes from './components/pages/own-recipes.js';
+import Favorites from './components/pages/favorites.js';
 import ErrorPage from './components/pages/error-page.js';
 import Login from './components/pages/login.js';
 import Signup from './components/pages/signup.js';
@@ -60,7 +61,8 @@ class App extends Component {
               <Route exact path="/logout" component={Logout} />
               <Route exact path="/profile" component={Profile} />
               <Route exact path="/menus" component={Menus} />
-              <Route exact path="/recipe-overview" component={RecipeOverview} />
+              <Route exact path="/own-recipes" component={OwnRecipes} />
+              <Route exact path="/favorites" component={Favorites} />
               <Route exact path="/recipes/:id" component={Recipe} />
               <Route exact path="/recipes/:id/edit" component={RecipeEdit} />
               <Route exact path="/create-recipe" component={RecipeEdit} />

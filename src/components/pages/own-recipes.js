@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import './../../css/recipe-overview.css';
 import RecipePreview from './../atoms/recipe-preview.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
@@ -14,8 +13,7 @@ class RecipeOverview extends Component{
       items: [],
       page: 1,
       newRecipesReady: false,
-      pageCount: 2,
-      type: 'my'
+      pageCount: 2
     };
     this.loadMore = this.loadMore.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
@@ -27,7 +25,7 @@ class RecipeOverview extends Component{
     this.setState({ newRecipesReady: false });
     if (this.state.pageCount < page) return false;
 
-    fetch(`${config.REACT_APP_APIURL}/recipes/overview?page=${page}&type=${this.state.type}`,
+    fetch(`${config.REACT_APP_APIURL}/recipes/overview?page=${page}&type=my`,
       { method: 'get',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -67,7 +65,6 @@ class RecipeOverview extends Component{
   toggleType() {
     this.setState(
       {
-        type: this.state.type === 'my' ? 'likes' : 'my',
         items: [],
         page: 1,
         pageCount: 2
@@ -77,29 +74,16 @@ class RecipeOverview extends Component{
   }
 
   render(){
-    const { error, isLoaded, items, type } = this.state;
+    const { error, isLoaded, items } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
       return <Loader />;
     } else {
       return (
-        <div className='recipe-overview'>
-          <div className='recipe-overview--switch-type'>
-            <div
-              className={`recipe-overview--switch-type-item ${type === 'my'}`}
-              onClick={() => { if (type !== 'my') this.toggleType(); }}>
-              Own recipes
-            </div>
-            <div className={`recipe-overview--switch-type-item ${type === 'likes'}`}
-              onClick={() => { if (type !== 'likes') this.toggleType(); }}>
-              My likes
-            </div>
-          </div>
-          <div className='recipe-overview--list'>
-            {items.map((object, i) => <RecipePreview key={i} item={object} />)}
-            <div id='js-mark-bottom'></div>
-          </div>
+        <div className='flex-container'>
+          {items.map((object, i) => <RecipePreview key={i} item={object} />)}
+          <div id='js-mark-bottom'></div>
         </div>
       );
     }
