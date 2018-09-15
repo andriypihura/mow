@@ -6,14 +6,15 @@ import Moment from 'react-moment';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartSolid, faPlus } from '@fortawesome/fontawesome-free-solid';
 import { faHeart as faHeartRegular } from '@fortawesome/fontawesome-free-regular';
-// import './../../css/recipe.css';
-// import './../../css/label.css';
 import defaultImage from './../../images/no-image.png';
 import Loader from './../atoms/loader.js';
 import Comment from './../atoms/comment.js';
 import Notification from './../atoms/notification.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 class Recipe extends Component{
 
@@ -36,6 +37,7 @@ class Recipe extends Component{
     this.likeRecipe = this.likeRecipe.bind(this);
     this.toogleMenusDropdown = this.toogleMenusDropdown.bind(this);
     this.addToMenu = this.addToMenu.bind(this);
+    this.props.setTitle('Recipe');
   }
 
   likeRecipe() {
@@ -174,6 +176,7 @@ class Recipe extends Component{
           liked: response.recipe.liked,
           comments: response.recipe.comments
         });
+        this.props.setTitle(`Recipe: ${response.recipe.title}`);
       })
       .catch(error => this.setState({ isLoaded: true, error: error }));
   }
@@ -312,7 +315,14 @@ class Recipe extends Component{
 }
 
 Recipe.propTypes = {
-  match: PropTypes.object
+  match: PropTypes.object,
+  setTitle: PropTypes.func
 };
 
-export default Recipe;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    setTitle: actions.setTitle
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(Recipe);

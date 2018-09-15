@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-// import './../../css/search.css';
-// import './../../css/form.css';
 import RecipePreview from './../atoms/recipe-preview.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/fontawesome-free-solid';
 import config from './../../config.js';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 class Search extends Component{
   constructor(props) {
@@ -23,6 +25,7 @@ class Search extends Component{
     this.filterResults = this.filterResults.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
+    this.props.setTitle('Search');
   }
 
   filterResults(data = {}) {
@@ -206,4 +209,15 @@ class Search extends Component{
     }
   }
 }
-export default Search;
+
+Search.propTypes = {
+  setTitle: PropTypes.func
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    setTitle: actions.setTitle
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(Search);

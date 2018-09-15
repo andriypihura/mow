@@ -4,13 +4,16 @@ import Loader from './../atoms/loader.js';
 import MenuPreview from './../atoms/menu-preview.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 const styles = {
   card: {
@@ -40,6 +43,7 @@ class Menus extends Component{
     this.openCreateMod = this.openCreateMod.bind(this);
     this.closeCreateMod = this.closeCreateMod.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
+    this.props.setTitle('Menus');
   }
 
   openCreateMod() {
@@ -94,7 +98,6 @@ class Menus extends Component{
   }
 
   componentDidMount() {
-    console.log('componentDidMount');
     fetch(`${config.REACT_APP_APIURL}/users/${sessionStorage.getItem('user')}/menus`,
       { method: 'get',
         headers: {
@@ -163,7 +166,14 @@ class Menus extends Component{
 Menus.propTypes = {
   showIngredients: PropTypes.bool,
   classes: PropTypes.object.isRequired,
+  setTitle: PropTypes.func,
   item: PropTypes.object
 };
 
-export default withStyles(styles)(Menus);
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    setTitle: actions.setTitle
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(withStyles(styles)(Menus));

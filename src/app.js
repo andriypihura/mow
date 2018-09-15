@@ -39,12 +39,6 @@ class App extends Component {
         } else {
           sessionStorage.removeItem('admin');
         }
-      })
-      .catch(() => {
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('user');
-        sessionStorage.removeItem('user_avatar');
-        sessionStorage.removeItem('admin');
       });
   }
 

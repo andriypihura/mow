@@ -25,9 +25,7 @@ import Donut from './../../images/donut.svg';
 import defaultImage from './../../images/no-image.png';
 import './../../css/dashboard.css';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actions from './../../actions';
 
 const drawerWidth = 240;
 
@@ -120,12 +118,6 @@ const styles = theme => ({
 });
 
 class Dashboard extends Component {
-  onLinkClick(e) {
-    this.props.changePage(
-      e.currentTarget.dataset.title
-    );
-  }
-
   render() {
     const { classes, pageTitle } = this.props;
     const user_avatar = sessionStorage.getItem('user_avatar');
@@ -144,16 +136,12 @@ class Dashboard extends Component {
               </Typography>
               <IconButton
                 color="inherit"
-                onClick={this.onLinkClick.bind(this)}
                 component={Link}
-                data-title='Profile'
                 to='/profile'>
                 <Avatar src={user_avatar || defaultImage}/>
               </IconButton>
               <IconButton
-                onClick={this.onLinkClick.bind(this)}
                 component={Link}
-                data-title='Logout'
                 to='/logout'>
                 <ExitToAppIcon />
               </IconButton>
@@ -168,9 +156,7 @@ class Dashboard extends Component {
           >
             <Link
               to='/'
-              onClick={this.onLinkClick.bind(this)}
-              className='dashboard--logo'
-              data-title='Home'>
+              className='dashboard--logo'>
               <img src={Donut} data-title="Donut" />
               Menu on web
             </Link>
@@ -178,9 +164,8 @@ class Dashboard extends Component {
               <div>
                 <ListItem
                   button
-                  onClick={this.onLinkClick.bind(this)}
                   component={Link}
-                  data-title='Menus' to='/menus'>
+                  to='/menus'>
                   <ListItemIcon>
                     <DashboardIcon />
                   </ListItemIcon>
@@ -188,9 +173,7 @@ class Dashboard extends Component {
                 </ListItem>
                 <ListItem
                   button
-                  onClick={this.onLinkClick.bind(this)}
                   component={Link}
-                  data-title='Own recipes'
                   to='/own-recipes'>
                   <ListItemIcon>
                     <ViewListIcon />
@@ -199,9 +182,7 @@ class Dashboard extends Component {
                 </ListItem>
                 <ListItem
                   button
-                  onClick={this.onLinkClick.bind(this)}
                   component={Link}
-                  data-title='Favorites'
                   to='/favorites'>
                   <ListItemIcon>
                     <FavoriteIcon />
@@ -210,9 +191,7 @@ class Dashboard extends Component {
                 </ListItem>
                 <ListItem
                   button
-                  onClick={this.onLinkClick.bind(this)}
                   component={Link}
-                  data-title='New recipe'
                   to='/create-recipe'>
                   <ListItemIcon>
                     <NoteAddIcon />
@@ -221,9 +200,7 @@ class Dashboard extends Component {
                 </ListItem>
                 <ListItem
                   button
-                  onClick={this.onLinkClick.bind(this)}
                   component={Link}
-                  data-title='Profile'
                   to='/profile'>
                   <ListItemIcon>
                     <BarChartIcon />
@@ -232,9 +209,7 @@ class Dashboard extends Component {
                 </ListItem>
                 <ListItem
                   button
-                  onClick={this.onLinkClick.bind(this)}
                   component={Link}
-                  data-title='Search'
                   to='/search'>
                   <ListItemIcon>
                     <SearchIcon />
@@ -243,9 +218,7 @@ class Dashboard extends Component {
                 </ListItem>
                 <ListItem
                   button
-                  onClick={this.onLinkClick.bind(this)}
                   component={Link}
-                  data-title='Logout'
                   to='/logout'>
                   <ListItemIcon>
                     <ExitToAppIcon />
@@ -271,7 +244,7 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
   children: PropTypes.array,
-  changePage: PropTypes.func,
+  setTitle: PropTypes.func,
   pageTitle: PropTypes.string
 };
 
@@ -281,10 +254,4 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    changePage: actions.changePage
-  }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard));
+export default connect(mapStateToProps, null)(withStyles(styles)(Dashboard));

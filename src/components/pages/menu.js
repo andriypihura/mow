@@ -45,7 +45,7 @@ class Menu extends Component{
           menuItems: response.menu.menu_items,
           groupedMenuItemsByDay: this.buildGroupedMenuDataByDay(response.menu.menu_items)
         });
-        this.props.changePage(`Menu: ${response.menu.title}`);
+        this.props.setTitle(`Menu: ${response.menu.title}`);
       })
       .catch(error => this.setState({ isLoaded: true, error: error }));
   }
@@ -99,12 +99,12 @@ class Menu extends Component{
 }
 
 Menu.propTypes = {
-  changePage: PropTypes.func
+  setTitle: PropTypes.func
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    changePage: actions.changePage
+    setTitle: actions.setTitle
   }, dispatch);
 };
 

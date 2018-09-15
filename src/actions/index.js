@@ -1,6 +1,6 @@
-const changePage = page => ({
+const setTitle = page => ({
   type: 'CHANGE_PAGE',
   payload: page
 });
 
-export { changePage };
+export { setTitle };

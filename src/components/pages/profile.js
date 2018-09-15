@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-// import './../../css/profile.css';
-// import './../../css/label.css';
 import defaultImage from './../../images/no-image.png';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
@@ -9,6 +7,10 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Moment from 'react-moment';
 import { faEdit } from '@fortawesome/fontawesome-free-regular';
 import config from './../../config.js';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 class Profile extends Component{
   constructor(props) {
@@ -25,6 +27,7 @@ class Profile extends Component{
     this.submitNameChange = this.submitNameChange.bind(this);
     this.submitEmailChange = this.submitEmailChange.bind(this);
     this.handleSubmitAvatar = this.handleSubmitAvatar.bind(this);
+    this.props.setTitle('Profile');
   }
 
   componentDidMount() {
@@ -204,4 +207,15 @@ class Profile extends Component{
     }
   }
 }
-export default Profile;
+
+Profile.propTypes = {
+  setTitle: PropTypes.func
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    setTitle: actions.setTitle
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(Profile);

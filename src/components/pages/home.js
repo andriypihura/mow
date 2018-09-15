@@ -3,6 +3,10 @@ import RecipePreview from './../atoms/recipe-preview.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 class Home extends Component{
   constructor(props) {
@@ -12,6 +16,7 @@ class Home extends Component{
       isLoaded: false,
       items: []
     };
+    this.props.setTitle('Home');
   }
 
   componentDidMount() {
@@ -42,4 +47,15 @@ class Home extends Component{
     }
   }
 }
-export default Home;
+
+Home.propTypes = {
+  setTitle: PropTypes.func
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    setTitle: actions.setTitle
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(Home);

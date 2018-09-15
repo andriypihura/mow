@@ -3,6 +3,10 @@ import RecipePreview from './../atoms/recipe-preview.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 class RecipeOverview extends Component{
   constructor(props) {
@@ -18,6 +22,7 @@ class RecipeOverview extends Component{
     this.loadMore = this.loadMore.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.toggleType = this.toggleType.bind(this);
+    this.props.setTitle('Own recipes');
   }
 
   loadMore(page) {
@@ -89,4 +94,15 @@ class RecipeOverview extends Component{
     }
   }
 }
-export default RecipeOverview;
+
+RecipeOverview.propTypes = {
+  setTitle: PropTypes.func
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    setTitle: actions.setTitle
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(RecipeOverview);

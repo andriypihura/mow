@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import './../../css/recipe-edit.css';
 import { Redirect } from 'react-router-dom';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 class RecipeEdit extends Component {
 
@@ -18,12 +20,14 @@ class RecipeEdit extends Component {
       item: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.props.setTitle(this.state.createMod && 'Create recipe' || 'Edit recipe');
   }
 
   componentDidUpdate() {
     const createMod = !this.props.match.params.id;
     if (createMod != this.state.createMod){
       this.setState({ createMod });
+      this.props.setTitle(createMod && 'Create recipe' || 'Edit recipe');
     }
   }
   componentDidMount() {
@@ -240,7 +244,14 @@ class RecipeEdit extends Component {
 }
 
 RecipeEdit.propTypes = {
-  match: PropTypes.object
+  match: PropTypes.object,
+  setTitle: PropTypes.func
 };
 
-export default RecipeEdit;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    setTitle: actions.setTitle
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(RecipeEdit);

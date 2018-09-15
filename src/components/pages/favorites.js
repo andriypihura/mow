@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import RecipePreview from './../atoms/recipe-preview.js';
+import PropTypes from 'prop-types';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import config from './../../config.js';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from './../../actions';
 
 class Favorites extends Component {
   constructor(props) {
@@ -19,6 +23,7 @@ class Favorites extends Component {
     this.loadMore = this.loadMore.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.toggleType = this.toggleType.bind(this);
+    this.props.setTitle('Favorites');
   }
 
   loadMore(page) {
@@ -90,4 +95,16 @@ class Favorites extends Component {
     }
   }
 }
-export default Favorites;
+
+
+Favorites.propTypes = {
+  setTitle: PropTypes.func
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    setTitle: actions.setTitle
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(Favorites);

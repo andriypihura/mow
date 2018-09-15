@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-// import './../../css/login.css';
-// import './../../css/form.css';
 
 class Logout extends Component {
   constructor(props) {
