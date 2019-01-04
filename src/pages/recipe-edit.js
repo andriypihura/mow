@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pageWrapper } from './page.js';
-import './../../css/recipe-edit.css';
+import './../css/recipe-edit.css';
 import { Redirect } from 'react-router-dom';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
-import config from './../../config.js';
+import config from './../config.js';
 
 class RecipeEdit extends Component {
 

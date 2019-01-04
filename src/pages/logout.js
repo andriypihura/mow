@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { pageWrapper } from './page.js';
-import './../../css/login.css';
-import './../../css/form.css';
+import './../css/login.css';
+import './../css/form.css';
 
 class Logout extends Component {
   constructor(props) {

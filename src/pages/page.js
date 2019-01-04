@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Nav from './../atoms/nav.js';
 import Footer from './../atoms/footer.js';
 import HandleErrors from './../helpers/error-handler.js';
-import config from './../../config.js';
+import config from './../config.js';
 
 export const pageWrapper = (WrappedComponent, secondary) => {
   class Wrapper extends Component {

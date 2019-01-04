@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { pageWrapper } from './page.js';
 import { Redirect } from 'react-router-dom';
-import './../../css/profile.css';
-import './../../css/label.css';
-import defaultImage from './../../images/no-image.png';
+import './../css/profile.css';
+import './../css/label.css';
+import defaultImage from './../images/no-image.png';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Moment from 'react-moment';
 import { faEdit } from '@fortawesome/fontawesome-free-regular';
-import config from './../../config.js';
+import config from './../config.js';
 
 class Profile extends Component{
   constructor(props) {

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './../../css/recipe-overview.css';
+import './../css/recipe-overview.css';
 import RecipePreview from './../atoms/recipe-preview.js';
 import { pageWrapper } from './page.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
-import config from './../../config.js';
+import config from './../config.js';
 
 class RecipeOverview extends Component{
   constructor(props) {

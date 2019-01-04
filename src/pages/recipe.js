@@ -7,14 +7,14 @@ import Moment from 'react-moment';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartSolid, faPlus } from '@fortawesome/fontawesome-free-solid';
 import { faHeart as faHeartRegular } from '@fortawesome/fontawesome-free-regular';
-import './../../css/recipe.css';
-import './../../css/label.css';
-import defaultImage from './../../images/no-image.png';
+import './../css/recipe.css';
+import './../css/label.css';
+import defaultImage from './../images/no-image.png';
 import Loader from './../atoms/loader.js';
 import Comment from './../atoms/comment.js';
 import Notification from './../atoms/notification.js';
 import HandleErrors from './../helpers/error-handler.js';
-import config from './../../config.js';
+import config from './../config.js';
 
 class Recipe extends Component{
 

@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './css/app.css';
-import Home from './components/pages/home.js';
-import Recipe from './components/pages/recipe.js';
-import RecipeEdit from './components/pages/recipe-edit.js';
-import RecipeOverview from './components/pages/recipe-overview.js';
-import ErrorPage from './components/pages/error-page.js';
-import Login from './components/pages/login.js';
-import Signup from './components/pages/signup.js';
-import Logout from './components/pages/logout.js';
-import Profile from './components/pages/profile.js';
-import Menus from './components/pages/menus.js';
-import Menu from './components/pages/menu.js';
-import Search from './components/pages/search.js';
+import Home from './pages/home.js';
+import Recipe from './pages/recipe.js';
+import RecipeEdit from './pages/recipe-edit.js';
+import RecipeOverview from './pages/recipe-overview.js';
+import ErrorPage from './pages/error-page.js';
+import Login from './pages/login.js';
+import Signup from './pages/signup.js';
+import Logout from './pages/logout.js';
+import Profile from './pages/profile.js';
+import Menus from './pages/menus.js';
+import Menu from './pages/menu.js';
+import Search from './pages/search.js';
 
 class App extends Component {
   render() {
