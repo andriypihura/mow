@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { pageWrapper } from './page.js';
 import { Redirect } from 'react-router-dom';
-import './../../css/menu.css';
+import './../css/menu.css';
 import Loader from './../atoms/loader.js';
 import MenuSection from './../atoms/menu-section.js';
 import HandleErrors from './../helpers/error-handler.js';
-import config from './../../config.js';
+import config from './../config.js';
 
 class Menu extends Component{
 

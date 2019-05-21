@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { pageWrapper } from './page.js';
-import './../../css/login.css';
-import './../../css/form.css';
+import './../css/login.css';
+import './../css/form.css';
 import HandleErrors from './../helpers/error-handler.js';
-import config from './../../config.js';
+import config from './../config.js';
 
-class Signup extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,21 +18,20 @@ class Signup extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    fetch(`${config.REACT_APP_APIURL}/users`,
+    fetch(`${config.REACT_APP_APIURL}/authenticate`,
       { method: 'post',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          'name': this.user_name.value,
           'email': this.email.value,
-          'password': this.password.value,
-          'password_confirmation': this.password_confirmation.value
+          'password': this.password.value
         })
       })
       .then(HandleErrors)
       .then(res => res.json())
-      .then(() => {
+      .then((result) => {
+        localStorage.setItem('token', result.auth_token);
         this.setState({submitted: true});
       })
       .catch(() => this.setState({ errors: true }));
@@ -44,19 +43,12 @@ class Signup extends Component {
       return (
         <div className="login">
           <div className="login--card">
-            <h1>Sign up</h1>
+            <h1>Login</h1>
             {errors && <p>No-no-no, try again</p>}
             <form className="form" onSubmit={this.handleSubmit}>
               <input
                 className="form--item"
                 placeholder="Username goes here..."
-                name="user_name"
-                ref={(r) => this.user_name = r}
-                type="text"
-              />
-              <input
-                className="form--item"
-                placeholder="Email goes here..."
                 name="email"
                 ref={(r) => this.email = r}
                 type="email"
@@ -69,19 +61,12 @@ class Signup extends Component {
                 type="password"
               />
               <input
-                className="form--item"
-                placeholder="Password goes here..."
-                name="password_confirmation"
-                ref={(r) => this.password_confirmation = r}
-                type="password"
-              />
-              <input
                 className="form--submit"
                 value="SUBMIT"
                 type="submit"
               />
             </form>
-            {submitted && (<Redirect to='/login'/>)}
+            {submitted && (<Redirect to='/'/>)}
           </div>
         </div>
       );
@@ -89,4 +74,4 @@ class Signup extends Component {
   }
 }
 
-export default pageWrapper(Signup);
+export default pageWrapper(Login);

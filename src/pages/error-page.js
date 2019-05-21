@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './../../css/error-page.css';
+import './../css/error-page.css';
 import { Link } from 'react-router-dom';
 import { pageWrapper } from './page.js';
 

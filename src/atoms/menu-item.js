@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './../../css/recipe-preview.css';
+import './../css/recipe-preview.css';
 import MenuItemModal from './menu-item-modal.js';
 
 class MenuItem extends Component {

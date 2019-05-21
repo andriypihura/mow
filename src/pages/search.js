@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import './../../css/search.css';
-import './../../css/form.css';
+import './../css/search.css';
+import './../css/form.css';
 import RecipePreview from './../atoms/recipe-preview.js';
 import { pageWrapper } from './page.js';
 import Loader from './../atoms/loader.js';
 import HandleErrors from './../helpers/error-handler.js';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/fontawesome-free-solid';
-import config from './../../config.js';
+import config from './../config.js';
 
 class Search extends Component{
   constructor(props) {

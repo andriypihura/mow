@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartSolid, faPlusCircle } from '@fortawesome/fontawesome-free-solid';
 import { faHeart as faHeartRegular } from '@fortawesome/fontawesome-free-regular';
-import './../../css/notification.css';
+import './../css/notification.css';
 
 const NOTIFY_TIMEOUT = 5000;
 const NOTIFICATION_TYPE = {
